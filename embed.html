@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grenzraum entdecken — Einbettung (Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EE;--surface:#FFFFFF;--ink:#21302A;--muted:#74807A;--faint:#9AA49E;
+    --line:#EAE3D6;--line-soft:#F1ECE2;--pine:#1D5A43;--pine-d:#16493B;--sand:#F3ECDD;
+    --gold:#C68A2E;--gold-soft:#F2E2C2;
+    --c-natur:#3E7C4E;--c-aussicht:#2E6E8E;--c-kultur:#7C5AA6;--c-wasser:#2C8B9C;
+    --host:#1f6f8b; /* fremde Website-Marke (bewusst anders) */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:#E9E6DF;-webkit-font-smoothing:antialiased;padding:34px 24px 60px}
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
+  svg.ic{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  .browser{max-width:1080px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 40px 80px -40px rgba(20,40,30,.45)}
+  .chrome{display:flex;align-items:center;gap:14px;background:#EDEAE3;padding:11px 16px;border-bottom:1px solid #DEDAD0}
+  .dots{display:flex;gap:7px}.dots i{width:12px;height:12px;border-radius:50%;display:block}
+  .dots .a{background:#ED6A5E}.dots .b{background:#F4BF4F}.dots .c{background:#61C554}
+  .url{flex:1;background:#fff;border-radius:8px;padding:7px 13px;font-size:13px;color:#5b6660;display:flex;align-items:center;gap:8px}
+  .url svg{width:13px;height:13px;color:#8a948e}
+
+  /* fremde Host-Website */
+  .host-head{display:flex;align-items:center;gap:14px;padding:16px 30px;border-bottom:1px solid #eee}
+  .host-logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px;color:var(--host)}
+  .host-logo .m{width:30px;height:30px;border-radius:8px;background:var(--host);display:grid;place-items:center;color:#fff}
+  .host-nav{display:flex;gap:22px;margin-left:18px;font-size:13.5px;color:#566}
+  .host-nav a{text-decoration:none;color:#566}.host-nav a.on{color:var(--host);font-weight:600}
+  .host-cta{margin-left:auto;font-size:13px;font-weight:600;color:#fff;background:var(--host);padding:8px 16px;border-radius:8px}
+
+  .host-body{padding:30px 30px 36px;background:#fff}
+  .crumb{font-size:12.5px;color:#9aa;}
+  .host-body h1{font-size:30px;font-weight:600;color:#243;margin-top:8px;letter-spacing:-.01em}
+  .host-body .lead{font-size:14.5px;color:#667;line-height:1.6;margin-top:10px;max-width:680px}
+
+  /* eingebettetes Widget */
+  .embed-note{display:flex;align-items:center;gap:8px;margin:24px 0 10px;font-size:12px;color:var(--muted)}
+  .embed-note .tag{display:inline-flex;align-items:center;gap:6px;background:var(--sand);color:var(--pine);font-weight:600;padding:4px 10px;border-radius:999px}
+  .embed-note .tag svg{width:13px;height:13px}
+  .widget{border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 16px 36px -26px rgba(20,40,30,.3)}
+  .w-bar{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line-soft);background:#fff}
+  .w-bar .b{width:26px;height:26px;border-radius:8px;background:linear-gradient(150deg,#2c6f54,#143f30);display:grid;place-items:center;color:#fff}
+  .w-bar .b svg{width:15px;height:15px}
+  .w-bar .t{font-size:13.5px;font-weight:600}
+  .w-chips{display:flex;gap:6px;margin-left:14px}
+  .w-chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:500;border:1px solid var(--line);color:#fff;padding:4px 10px;border-radius:999px}
+  .w-chip .d{width:7px;height:7px;border-radius:50%}
+  .w-bar .lang{margin-left:auto;font-size:11.5px;color:var(--faint);font-weight:600}
+
+  .w-map{position:relative;height:360px}
+  .w-map svg.bg{position:absolute;inset:0;width:100%;height:100%}
+  .maplabel{position:absolute;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8a978f}
+  .pin{position:absolute;transform:translate(-50%,-100%);filter:drop-shadow(0 5px 5px rgba(20,40,30,.25))}
+  .pin .head{width:22px;height:22px;border-radius:50% 50% 50% 0;transform:rotate(45deg);background:var(--pc);border:2.5px solid #fff;display:grid;place-items:center}
+  .pin .head::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff;transform:rotate(-45deg)}
+  .pin.secret .head{background:var(--gold)}
+  .pin.secret .star{position:absolute;top:-7px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--gold)}
+  .w-card{position:absolute;left:16px;bottom:16px;width:230px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 12px 28px -16px rgba(20,40,30,.35);border:1px solid var(--line-soft)}
+  .w-card img{width:100%;height:96px;object-fit:cover}
+  .w-card .p{padding:10px 12px 12px}
+  .w-card .bd{display:flex;gap:5px;margin-bottom:6px}
+  .badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:#fff;padding:2px 8px;border-radius:999px}
+  .badge.gold{background:var(--gold);color:#3c2a06}
+  .w-card h4{font-size:15px;font-weight:500}
+  .w-card p{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+  .w-foot{position:absolute;right:14px;bottom:16px;font-size:10.5px;color:#fff;background:rgba(20,35,28,.6);backdrop-filter:blur(3px);padding:5px 10px;border-radius:999px}
+
+  .snippet{margin-top:18px;background:#15201b;border-radius:12px;padding:14px 16px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#cfe7d8;overflow:auto}
+  .snippet .c{color:#7fae93}.snippet .a{color:#e7c98a}
+  .snippet-lbl{font-size:12px;color:var(--muted);margin:22px 0 8px;display:flex;align-items:center;gap:7px}
+  .snippet-lbl svg{width:14px;height:14px}
+</style>
+</head>
+<body>
+  <div class="browser">
+    <div class="chrome">
+      <div class="dots"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+      <div class="url"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>www.ferienregion-bayerischer-wald.de/ausflugsziele</div>
+    </div>
+
+    <!-- fremde Website -->
+    <div class="host-head">
+      <div class="host-logo"><span class="m"><svg class="ic" viewBox="0 0 24 24" style="width:17px;height:17px"><path d="M3 20l5-9 4 6 3-4 6 7z"/></svg></span>Ferienregion Bayerischer Wald</div>
+      <nav class="host-nav"><a href="#">Region</a><a href="#">Orte</a><a href="#" class="on">Ausflugsziele</a><a href="#">Unterkünfte</a><a href="#">Veranstaltungen</a></nav>
+      <span class="host-cta">Urlaub planen</span>
+    </div>
+
+    <div class="host-body">
+      <div class="crumb">Startseite › Erleben › Ausflugsziele</div>
+      <h1>Ausflugsziele &amp; Geheimtipps</h1>
+      <p class="lead">Von rauschenden Wasserfällen bis zu stillen Bergseen — entdecken Sie die schönsten Ziele der Region direkt auf der interaktiven Karte.</p>
+
+      <div class="embed-note">
+        <span class="tag"><svg class="ic" viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 6l-2 12"/></svg>Eingebettetes Modul</span>
+        läuft auf der Bestandswebsite der Region — dreisprachig, ohne Programmierung integrierbar
+      </div>
+
+      <!-- WIDGET -->
+      <div class="widget">
+        <div class="w-bar">
+          <div class="b"><svg class="ic" viewBox="0 0 24 24"><path d="M3 20l6-16 6 7 3-3 3 12z"/></svg></div>
+          <div class="t">Freizeitkarte</div>
+          <div class="w-chips">
+            <span class="w-chip" style="background:var(--c-natur)"><span class="d" style="background:#fff"></span>Natur</span>
+            <span class="w-chip" style="background:var(--c-wasser)"><span class="d" style="background:#fff"></span>Wasser</span>
+            <span class="w-chip" style="background:var(--gold);color:#3c2a06">★ Geheimtipps</span>
+          </div>
+          <div class="lang">DE · CZ · EN</div>
+        </div>
+        <div class="w-map">
+          <svg class="bg" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F1E6"/><stop offset="1" stop-color="#EAF0E2"/></linearGradient></defs>
+            <rect width="900" height="600" fill="url(#sky)"/>
+            <path d="M-40 400 C120 350 220 450 360 410 C500 374 580 460 760 420 C840 402 900 440 960 425 L960 640 L-40 640Z" fill="#DDE7CF"/>
+            <path d="M-40 480 C160 440 300 520 480 485 C660 450 780 520 960 490 L960 640 L-40 640Z" fill="#CFDEC0"/>
+            <ellipse cx="230" cy="250" rx="62" ry="38" fill="#BFD9DE"/>
+            <path d="M-20 300 C160 275 250 360 430 320 C610 280 720 360 940 335" fill="none" stroke="#B4D2D9" stroke-width="12" stroke-linecap="round"/>
+            <path d="M470 -20 C500 150 440 320 520 470 C560 540 520 620 560 660" fill="none" stroke="#B9A98A" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round" opacity=".8"/>
+          </svg>
+          <div class="maplabel" style="left:90px;top:40px">Bayern · DE</div>
+          <div class="maplabel" style="right:120px;top:44px">Čechy · CZ</div>
+          <div class="pin secret" style="left:40%;top:56%;--pc:var(--gold)"><span class="star">★</span><div class="head"></div></div>
+          <div class="pin" style="left:28%;top:36%;--pc:var(--c-aussicht)"><div class="head"></div></div>
+          <div class="pin secret" style="left:56%;top:32%;--pc:var(--gold)"><span class="star">★</span><div class="head"></div></div>
+          <div class="pin" style="left:70%;top:50%;--pc:var(--c-natur)"><div class="head"></div></div>
+          <div class="pin secret" style="left:64%;top:66%;--pc:var(--gold)"><span class="star">★</span><div class="head"></div></div>
+          <div class="pin" style="left:80%;top:38%;--pc:var(--c-aussicht)"><div class="head"></div></div>
+
+          <div class="w-card">
+            <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=400&q=70" alt="">
+            <div class="p">
+              <div class="bd"><span class="badge" style="background:var(--c-wasser)">Wasser</span><span class="badge gold">★ Geheimtipp</span></div>
+              <h4 class="serif">Rißlochfälle</h4>
+              <p>Versteckte Wasserfälle in einer wildromantischen Schlucht.</p>
+            </div>
+          </div>
+          <div class="w-foot">Grenzraum entdecken · OpenStreetMap</div>
+        </div>
+      </div>
+
+      <div class="snippet-lbl"><svg class="ic" viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3"/></svg>Einbindung mit einer Zeile:</div>
+      <div class="snippet">&lt;<span class="a">iframe</span> <span class="c">src</span>=<span style="color:#bcd7c4">"https://karte.grenzraum-entdecken.de/embed?lang=de"</span> <span class="c">width</span>=<span style="color:#bcd7c4">"100%"</span> <span class="c">height</span>=<span style="color:#bcd7c4">"560"</span> <span class="c">style</span>=<span style="color:#bcd7c4">"border:0;border-radius:16px"</span>&gt;&lt;/<span class="a">iframe</span>&gt;</div>
+    </div>
+  </div>
+</body>
+</html>

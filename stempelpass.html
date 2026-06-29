@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grenzraum entdecken — Stempelpass (Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EE; --surface:#FFFFFF; --ink:#21302A; --muted:#74807A; --faint:#9AA49E;
+    --line:#EAE3D6; --line-soft:#F1ECE2;
+    --pine:#1D5A43; --pine-d:#16493B; --sand:#F3ECDD; --gold:#C68A2E; --gold-soft:#F2E2C2;
+    --c-aussicht:#2E6E8E; --c-wasser:#2C8B9C; --c-natur:#3E7C4E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:
+    radial-gradient(1100px 520px at 50% -10%, #EEF2E5, transparent 70%), var(--bg);
+    -webkit-font-smoothing:antialiased;min-height:100vh}
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
+  svg.ic{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  .page{max-width:1180px;margin:0 auto;padding:46px 24px 70px}
+  .page-head{text-align:center;margin-bottom:40px}
+  .page-head .eyebrow{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .page-head h1{font-size:34px;font-weight:500;letter-spacing:-.02em;margin-top:8px}
+  .page-head p{color:var(--muted);font-size:15px;margin-top:8px}
+
+  .row{display:flex;gap:40px;justify-content:center;align-items:flex-start;flex-wrap:wrap}
+  .col{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .caption{font-size:13px;color:var(--muted)}
+  .caption b{color:var(--ink);font-weight:600}
+
+  /* phone */
+  .phone{width:300px;height:632px;background:#1c1c1e;border-radius:46px;padding:9px;
+    box-shadow:0 40px 70px -30px rgba(25,45,35,.5), 0 8px 20px -10px rgba(25,45,35,.3)}
+  .screen{position:relative;width:100%;height:100%;border-radius:38px;overflow:hidden;background:var(--bg)}
+  .island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:84px;height:22px;background:#000;border-radius:999px;z-index:40}
+  .statusbar{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px;font-size:13px;font-weight:600;z-index:30}
+  .statusbar .r{display:flex;gap:6px;align-items:center}
+  .statusbar svg{width:16px;height:16px}
+
+  /* generic screen body */
+  .body{position:absolute;inset:0;top:44px;display:flex;flex-direction:column}
+  .scr-pad{padding:14px 20px}
+
+  /* ---------- Screen 1: Scan ---------- */
+  .scan .screen{background:#13201a}
+  .scan .cam{position:absolute;inset:0}
+  .scan .cam img{width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(.9)}
+  .scan .cam::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,15,.55),rgba(10,20,15,.2) 30%,rgba(10,20,15,.75))}
+  .scan .body{color:#fff}
+  .scan .topbar{display:flex;align-items:center;gap:12px;padding:6px 18px 0}
+  .scan .iconbtn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center;backdrop-filter:blur(4px)}
+  .scan .topbar h2{font-size:16px;font-weight:600}
+  .scan .locchip{margin:14px auto 0;display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);
+    backdrop-filter:blur(6px);padding:7px 14px;border-radius:999px;font-size:13px;font-weight:500;align-self:center}
+  .scan .frame{margin:auto;width:206px;height:206px;position:relative}
+  .scan .frame .corner{position:absolute;width:34px;height:34px;border:3px solid #fff;border-radius:6px}
+  .scan .frame .tl{top:0;left:0;border-right:0;border-bottom:0}
+  .scan .frame .tr{top:0;right:0;border-left:0;border-bottom:0}
+  .scan .frame .bl{bottom:0;left:0;border-right:0;border-top:0}
+  .scan .frame .br{bottom:0;right:0;border-left:0;border-top:0}
+  .scan .frame .laser{position:absolute;left:8px;right:8px;top:50%;height:2px;border-radius:2px;
+    background:linear-gradient(90deg,transparent,#9fe6c2,transparent);box-shadow:0 0 14px 2px rgba(120,220,170,.5)}
+  .scan .hint{text-align:center;font-size:14px;line-height:1.45;padding:0 34px;margin-bottom:6px;color:rgba(255,255,255,.92)}
+  .scan .manual{text-align:center;font-size:13px;color:rgba(255,255,255,.7);padding-bottom:22px}
+  .scan .manual u{text-underline-offset:3px}
+
+  /* ---------- Screen 2: Erfolg ---------- */
+  .ok .screen{background:radial-gradient(420px 280px at 50% 6%, #E7F0DC, transparent 70%), var(--bg)}
+  .ok .body{align-items:center;text-align:center}
+  .ok .sparkle{position:absolute;color:var(--gold);opacity:.8}
+  .ok .stamp-wrap{margin-top:38px;position:relative}
+  .ok .stamp{width:150px;height:150px;border-radius:50%;border:3px solid var(--pine);display:grid;place-items:center;
+    transform:rotate(-9deg);color:var(--pine);position:relative;background:rgba(29,90,67,.04)}
+  .ok .stamp::before{content:'';position:absolute;inset:9px;border:1.5px dashed rgba(29,90,67,.45);border-radius:50%}
+  .ok .stamp .inner{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .ok .stamp .inner small{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+  .ok .badgechk{position:absolute;right:-6px;bottom:-2px;width:42px;height:42px;border-radius:50%;background:var(--pine);
+    color:#fff;display:grid;place-items:center;border:4px solid var(--bg)}
+  .ok h2{font-size:30px;font-weight:500;margin-top:30px}
+  .ok .place{font-size:16px;color:var(--ink);font-weight:500;margin-top:2px}
+  .ok .date{font-size:13px;color:var(--muted);margin-top:4px}
+  .ok .prog{width:208px;margin:24px auto 0}
+  .ok .prog .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .ok .prog .lbl b{color:var(--pine)}
+  .ok .bar{height:8px;border-radius:999px;background:#E6E0D2;overflow:hidden}
+  .ok .bar i{display:block;height:100%;width:50%;background:var(--pine);border-radius:999px}
+  .ok .reward{margin-top:14px;font-size:13px;color:#7a5512;background:#FBF1DA;padding:8px 14px;border-radius:999px;display:inline-flex;gap:7px;align-items:center}
+  .ok .cta{position:absolute;left:20px;right:20px;bottom:24px;background:var(--pine);color:#fff;border:0;font:inherit;font-weight:500;
+    font-size:15px;padding:15px;border-radius:16px;cursor:pointer}
+
+  /* ---------- Screen 3: Pass ---------- */
+  .pass .head h2{font-size:25px;font-weight:500}
+  .pass .head p{font-size:13px;color:var(--muted);margin-top:3px}
+  .pass .pcard{margin:6px 20px 0;background:var(--surface);border:1px solid var(--line);border-radius:20px;
+    padding:16px;display:flex;align-items:center;gap:16px;box-shadow:0 10px 24px -16px rgba(30,50,40,.25)}
+  .ring{width:74px;height:74px;flex:0 0 auto;position:relative;display:grid;place-items:center}
+  .ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+  .ring .num{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--pine);line-height:1}
+  .ring .num small{font-size:11px;color:var(--muted);font-family:'Inter';font-weight:500}
+  .pcard .meta .t{font-size:14px;font-weight:600}
+  .pcard .meta .s{font-size:12.5px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:6px}
+  .pcard .meta .s .star{color:var(--gold)}
+  .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:18px 20px 16px;overflow:hidden}
+  .stmp{display:flex;flex-direction:column;align-items:center;gap:7px}
+  .stmp .disc{width:66px;height:66px;border-radius:50%;display:grid;place-items:center}
+  .stmp.got .disc{border:2px solid var(--pine);color:var(--pine);transform:rotate(-7deg);background:rgba(29,90,67,.05);position:relative}
+  .stmp.got .disc::before{content:'';position:absolute;inset:6px;border:1px dashed rgba(29,90,67,.4);border-radius:50%}
+  .stmp.todo .disc{border:2px dashed #D7D0C2;color:#C3BCAD}
+  .stmp .nm{font-size:10.5px;color:var(--ink);text-align:center;line-height:1.2;font-weight:500}
+  .stmp.todo .nm{color:var(--faint)}
+  .tabbar{margin-top:auto;border-top:1px solid var(--line-soft);background:var(--surface);
+    display:flex;justify-content:space-around;padding:11px 0 18px;color:var(--faint)}
+  .tabbar .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:500}
+  .tabbar .tab.on{color:var(--pine)}
+  .tabbar .tab svg{width:21px;height:21px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-head">
+    <div class="eyebrow">Grenzraum entdecken</div>
+    <h1 class="serif">Digitaler Stempelpass</h1>
+    <p>Geheimtipps vor Ort entdecken, abscannen, sammeln — niederschwellig im Browser (PWA).</p>
+  </div>
+
+  <div class="row">
+
+    <!-- 1: SCAN -->
+    <div class="col">
+      <div class="phone scan">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="statusbar" style="color:#fff">
+            <span>9:41</span>
+            <span class="r">
+              <svg class="ic" viewBox="0 0 24 24"><path d="M2 20h.01M6 20v-3M10 20v-6M14 20v-9M18 20v-12"/></svg>
+              <svg class="ic" viewBox="0 0 24 24"><path d="M5 13a10 10 0 0114 0M8.5 16.5a5 5 0 017 0M12 20h.01"/></svg>
+              <svg class="ic" viewBox="0 0 24 24"><rect x="2" y="8" width="18" height="9" rx="2"/><path d="M22 11v3"/></svg>
+            </span>
+          </div>
+          <div class="cam"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=70" alt=""></div>
+          <div class="body">
+            <div class="topbar">
+              <div class="iconbtn"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M15 18l-6-6 6-6"/></svg></div>
+              <h2>Stempel sammeln</h2>
+            </div>
+            <div class="locchip">
+              <svg class="ic" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Rißlochfälle
+            </div>
+            <div class="frame">
+              <span class="corner tl"></span><span class="corner tr"></span>
+              <span class="corner bl"></span><span class="corner br"></span>
+              <span class="laser"></span>
+            </div>
+            <div class="hint">Richte die Kamera auf den<br>QR-Code am Schild vor Ort.</div>
+            <div class="manual">Kein Empfang? <u>Offline scannen</u></div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><b>1 · Scannen</b> — QR-Code am Geheimtipp</div>
+    </div>
+
+    <!-- 2: ERFOLG -->
+    <div class="col">
+      <div class="phone ok">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="r">
+              <svg class="ic" viewBox="0 0 24 24"><path d="M2 20h.01M6 20v-3M10 20v-6M14 20v-9M18 20v-12"/></svg>
+              <svg class="ic" viewBox="0 0 24 24"><path d="M5 13a10 10 0 0114 0M8.5 16.5a5 5 0 017 0M12 20h.01"/></svg>
+              <svg class="ic" viewBox="0 0 24 24"><rect x="2" y="8" width="18" height="9" rx="2"/><path d="M22 11v3"/></svg>
+            </span>
+          </div>
+          <div class="body">
+            <svg class="sparkle" style="left:46px;top:78px;width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <svg class="sparkle" style="right:44px;top:120px;width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <svg class="sparkle" style="right:70px;top:64px;width:8px;height:8px" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+
+            <div class="stamp-wrap">
+              <div class="stamp">
+                <div class="inner">
+                  <small>Geheimtipp</small>
+                  <svg class="ic" viewBox="0 0 24 24" style="width:34px;height:34px;stroke-width:1.6"><path d="M4 18c3-1 4-5 7-5s4 4 7 3"/><path d="M5 13c2.5-1 3-4 6-4s4 3 6 2.5"/><path d="M3 21h18"/></svg>
+                  <small>Rißlochfälle</small>
+                </div>
+              </div>
+              <div class="badgechk"><svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px;stroke-width:2.4"><path d="M5 12l5 5 9-10"/></svg></div>
+            </div>
+
+            <h2 class="serif">Geschafft!</h2>
+            <div class="place">Rißlochfälle abgestempelt</div>
+            <div class="date">27. Juni 2026 · 9:41 Uhr</div>
+
+            <div class="prog">
+              <div class="lbl"><span>Geheimtipps</span><b>4 / 8</b></div>
+              <div class="bar"><i></i></div>
+            </div>
+
+            <button class="cta">Weiter entdecken</button>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><b>2 · Geschafft</b> — Stempel & Fortschritt</div>
+    </div>
+
+    <!-- 3: PASS -->
+    <div class="col">
+      <div class="phone pass">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="r">
+              <svg class="ic" viewBox="0 0 24 24"><path d="M2 20h.01M6 20v-3M10 20v-6M14 20v-9M18 20v-12"/></svg>
+              <svg class="ic" viewBox="0 0 24 24"><path d="M5 13a10 10 0 0114 0M8.5 16.5a5 5 0 017 0M12 20h.01"/></svg>
+              <svg class="ic" viewBox="0 0 24 24"><rect x="2" y="8" width="18" height="9" rx="2"/><path d="M22 11v3"/></svg>
+            </span>
+          </div>
+          <div class="body">
+            <div class="scr-pad head">
+              <h2 class="serif">Mein Stempelpass</h2>
+              <p>Sammle die Geheimtipps des Grenzraums</p>
+            </div>
+
+            <div class="pcard">
+              <div class="ring">
+                <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" fill="none" stroke="#E6E0D2" stroke-width="8"/>
+                  <circle cx="40" cy="40" r="34" fill="none" stroke="#1D5A43" stroke-width="8" stroke-linecap="round"
+                    stroke-dasharray="213.6" stroke-dashoffset="106.8"/></svg>
+                <div class="num">4<small>/8</small></div>
+              </div>
+              <div class="meta">
+                <div class="t">Halbzeit — gut dabei!</div>
+                <div class="s"><span class="star">★</span> Noch 4 Geheimtipps zu entdecken</div>
+              </div>
+            </div>
+
+            <div class="grid">
+              <div class="stmp got"><div class="disc"><svg class="ic" viewBox="0 0 24 24" style="width:26px;height:26px;stroke-width:1.5"><path d="M4 18c3-1 4-5 7-5s4 4 7 3"/><path d="M3 21h18"/></svg></div><div class="nm">Rißloch­fälle</div></div>
+              <div class="stmp got"><div class="disc"><svg class="ic" viewBox="0 0 24 24" style="width:26px;height:26px;stroke-width:1.5"><path d="M3 20l6-12 5 8 3-4 4 8z"/></svg></div><div class="nm">Kl. Arbersee</div></div>
+              <div class="stmp got"><div class="disc"><svg class="ic" viewBox="0 0 24 24" style="width:26px;height:26px;stroke-width:1.5"><path d="M4 17c2-3 4-3 6-1s4 2 6-1"/><path d="M4 13c2-3 4-3 6-1s4 2 6-1"/></svg></div><div class="nm">Schwarzer See</div></div>
+              <div class="stmp got"><div class="disc"><svg class="ic" viewBox="0 0 24 24" style="width:26px;height:26px;stroke-width:1.5"><path d="M3 20l5-11 4 6 3-5 6 10z"/></svg></div><div class="nm">Pröller</div></div>
+              <div class="stmp todo"><div class="disc"><svg class="ic" viewBox="0 0 24 24" style="width:22px;height:22px"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></div><div class="nm">Teufelsloch</div></div>
+              <div class="stmp todo"><div class="disc"><svg class="ic" viewBox="0 0 24 24" style="width:22px;height:22px"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></div><div class="nm">Höllbachg’spreng</div></div>
+            </div>
+
+            <div class="tabbar">
+              <div class="tab"><svg class="ic" viewBox="0 0 24 24"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6 3-6-3z"/><path d="M9 7v13M15 4v13"/></svg>Karte</div>
+              <div class="tab on"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg>Pass</div>
+              <div class="tab"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg>Profil</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><b>3 · Mein Pass</b> — Sammlung & Fortschritt</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grenzraum entdecken — Karte (Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EE; --surface:#FFFFFF; --ink:#21302A; --muted:#74807A; --faint:#9AA49E;
+    --line:#EAE3D6; --line-soft:#F1ECE2;
+    --pine:#1D5A43; --pine-d:#16493B; --sand:#F3ECDD; --gold:#C68A2E; --gold-soft:#F2E2C2;
+    --c-natur:#3E7C4E; --c-aussicht:#2E6E8E; --c-kultur:#7C5AA6; --c-einkehr:#C0703A; --c-wasser:#2C8B9C;
+    --shadow:0 18px 40px -18px rgba(30,50,40,.28);
+    --shadow-sm:0 6px 18px -10px rgba(30,50,40,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
+  .app{display:flex;flex-direction:column;height:100vh}
+
+  /* Header */
+  header{display:flex;align-items:center;gap:18px;padding:14px 26px;background:rgba(255,255,255,.86);
+    border-bottom:1px solid var(--line);backdrop-filter:blur(8px);z-index:30}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(150deg,#2c6f54,#143f30);
+    display:grid;place-items:center;color:#fff;box-shadow:var(--shadow-sm)}
+  .brand h1{font-size:19px;font-weight:600;letter-spacing:-.01em;line-height:1.1}
+  .brand p{font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+  .grow{flex:1}
+  .lang{display:flex;align-items:center;gap:2px;font-size:12.5px;color:var(--faint);font-weight:500}
+  .lang button{font:inherit;color:var(--faint);background:none;border:0;padding:5px 9px;border-radius:8px;cursor:pointer}
+  .lang button.on{color:var(--ink);background:var(--sand)}
+  .lang span{color:var(--line)}
+  .cta{display:inline-flex;align-items:center;gap:8px;background:var(--pine);color:#fff;border:0;
+    font:inherit;font-weight:500;font-size:14px;padding:10px 18px;border-radius:999px;cursor:pointer;box-shadow:var(--shadow-sm)}
+  .cta:hover{background:var(--pine-d)}
+
+  main{flex:1;display:flex;min-height:0}
+
+  /* Left list */
+  .list{flex:0 0 396px;background:var(--surface);border-right:1px solid var(--line);
+    display:flex;flex-direction:column;min-height:0}
+  .list-head{padding:22px 24px 10px}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--pine)}
+  .list-head h2{font-size:26px;font-weight:500;letter-spacing:-.02em;margin-top:6px;line-height:1.08}
+  .list-head .sub{font-size:13px;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;padding:14px 24px 16px;border-bottom:1px solid var(--line-soft)}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--ink);
+    background:var(--surface);border:1px solid var(--line);padding:6px 12px 6px 10px;border-radius:999px;cursor:pointer}
+  .chip .dot{width:8px;height:8px;border-radius:50%}
+  .chip.off{color:var(--faint);background:#fff}
+  .chip.off .dot{opacity:.35}
+  .chip.secret{border-color:var(--gold-soft);background:#FCF7EC;color:#7a5512}
+
+  .scroll{overflow-y:auto;padding:8px 16px 24px;display:flex;flex-direction:column;gap:8px}
+  .scroll::-webkit-scrollbar{width:8px}
+  .scroll::-webkit-scrollbar-thumb{background:#e6dfd2;border-radius:8px}
+  .poi{display:flex;gap:13px;padding:9px;border-radius:16px;cursor:pointer;border:1px solid transparent;transition:.16s}
+  .poi:hover{background:var(--sand)}
+  .poi.active{background:#fff;border-color:var(--line);box-shadow:var(--shadow-sm)}
+  .poi .thumb{flex:0 0 86px;height:86px;border-radius:12px;object-fit:cover;background:#eee}
+  .poi .body{min-width:0;display:flex;flex-direction:column;gap:3px;padding-top:2px}
+  .poi .cat{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .poi .cat .dot{width:7px;height:7px;border-radius:50%}
+  .poi h3{font-size:16px;font-weight:500;letter-spacing:-.01em;line-height:1.15}
+  .poi p{font-size:12.5px;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .tip{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;margin-top:2px;
+    font-size:10.5px;font-weight:600;color:#7a5512;background:#FBF1DA;padding:2px 8px;border-radius:999px}
+
+  /* Map */
+  .map{flex:1;position:relative;overflow:hidden}
+  .map svg.bg{position:absolute;inset:0;width:100%;height:100%}
+  .maplabel{position:absolute;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#8a978f}
+  .pin{position:absolute;transform:translate(-50%,-100%);cursor:pointer;filter:drop-shadow(0 6px 6px rgba(20,40,30,.25))}
+  .pin .head{width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(45deg);
+    background:var(--pc,#3E7C4E);border:2.5px solid #fff;display:grid;place-items:center}
+  .pin .head::after{content:'';width:8px;height:8px;border-radius:50%;background:#fff;transform:rotate(-45deg)}
+  .pin.secret .head{background:var(--gold)}
+  .pin.secret .star{position:absolute;top:-7px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--gold)}
+  .pin.big{filter:drop-shadow(0 12px 14px rgba(20,40,30,.32))}
+  .pin.big .head{width:34px;height:34px}
+  .pin.big .head::after{width:11px;height:11px}
+
+  .controls{position:absolute;right:18px;bottom:18px;display:flex;flex-direction:column;background:#fff;border-radius:12px;
+    box-shadow:var(--shadow-sm);overflow:hidden}
+  .controls button{width:38px;height:38px;border:0;background:#fff;font-size:18px;color:var(--ink);cursor:pointer}
+  .controls button:first-child{border-bottom:1px solid var(--line-soft)}
+
+  /* Detail card on map */
+  .detail{position:absolute;left:24px;bottom:24px;width:330px;background:#fff;border-radius:22px;overflow:hidden;
+    box-shadow:var(--shadow);border:1px solid var(--line-soft)}
+  .detail .hero{position:relative;height:172px}
+  .detail .hero img{width:100%;height:100%;object-fit:cover}
+  .detail .hero .grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,35,28,.55),transparent 55%)}
+  .detail .tags{position:absolute;left:14px;bottom:12px;display:flex;gap:7px}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#fff;
+    padding:4px 10px;border-radius:999px;backdrop-filter:blur(2px)}
+  .badge.gold{background:var(--gold);color:#3c2a06}
+  .detail .close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;border:0;
+    background:rgba(255,255,255,.9);color:var(--ink);cursor:pointer;display:grid;place-items:center}
+  .detail .pad{padding:16px 18px 18px}
+  .detail h3{font-size:21px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
+  .detail .loc{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted);margin-top:5px}
+  .detail .desc{font-size:13.5px;color:#4c5852;line-height:1.5;margin-top:11px}
+  .detail .actions{display:flex;gap:9px;margin-top:16px}
+  .btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;font:inherit;font-weight:500;
+    font-size:13.5px;padding:11px;border-radius:12px;cursor:pointer;border:1px solid var(--line)}
+  .btn.primary{background:var(--pine);color:#fff;border-color:var(--pine);flex:1.4}
+  .btn.primary:hover{background:var(--pine-d)}
+  .btn.ghost{background:#fff;color:var(--ink)}
+  .btn.ghost:hover{background:var(--sand)}
+
+  svg.ic{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .mockup-tag{position:fixed;bottom:10px;right:14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);z-index:50}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand">
+      <div class="logo">
+        <svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M3 20l6-16 6 7 3-3 3 12z"/><path d="M9 4l3 8"/></svg>
+      </div>
+      <div>
+        <h1 class="serif">Grenzraum entdecken</h1>
+        <p>Landkreis Regen · Bezirk Klattau</p>
+      </div>
+    </div>
+    <div class="grow"></div>
+    <div class="lang">
+      <button class="on">DE</button><span>·</span><button>CZ</button><span>·</span><button>EN</button>
+    </div>
+    <button class="cta">
+      <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg>
+      Stempelpass
+    </button>
+  </header>
+
+  <main>
+    <!-- Left list -->
+    <aside class="list">
+      <div class="list-head">
+        <div class="eyebrow">Freizeitkarte</div>
+        <h2 class="serif">Entdecke das Arberland</h2>
+        <div class="sub">
+          <svg class="ic" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          11 Ausflugsziele &amp; Geheimtipps im Grenzraum
+        </div>
+      </div>
+
+      <div class="chips">
+        <button class="chip"><span class="dot" style="background:var(--c-natur)"></span>Natur</button>
+        <button class="chip"><span class="dot" style="background:var(--c-aussicht)"></span>Aussicht</button>
+        <button class="chip off"><span class="dot" style="background:var(--c-kultur)"></span>Kultur</button>
+        <button class="chip"><span class="dot" style="background:var(--c-wasser)"></span>Wasser</button>
+        <button class="chip secret">★ Geheimtipps</button>
+      </div>
+
+      <div class="scroll">
+        <!-- active -->
+        <div class="poi active">
+          <img class="thumb" src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=240&q=70" alt="">
+          <div class="body">
+            <div class="cat" style="color:var(--c-wasser)"><span class="dot" style="background:var(--c-wasser)"></span>Wasser</div>
+            <h3 class="serif">Rißlochfälle</h3>
+            <p>Versteckte Wasserfälle in einer wildromantischen Schlucht bei Bodenmais.</p>
+            <span class="tip">★ Geheimtipp</span>
+          </div>
+        </div>
+
+        <div class="poi">
+          <img class="thumb" src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=240&q=70" alt="">
+          <div class="body">
+            <div class="cat" style="color:var(--c-aussicht)"><span class="dot" style="background:var(--c-aussicht)"></span>Aussicht</div>
+            <h3 class="serif">Großer Arber</h3>
+            <p>Höchster Gipfel des Bayerischen Waldes mit weitem Rundblick bis ins Böhmische.</p>
+          </div>
+        </div>
+
+        <div class="poi">
+          <img class="thumb" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=240&q=70" alt="">
+          <div class="body">
+            <div class="cat" style="color:var(--c-natur)"><span class="dot" style="background:var(--c-natur)"></span>Natur</div>
+            <h3 class="serif">Kleiner Arbersee</h3>
+            <p>Stiller Bergsee mit schwimmenden Inseln, abseits der großen Wege.</p>
+            <span class="tip">★ Geheimtipp</span>
+          </div>
+        </div>
+
+        <div class="poi">
+          <img class="thumb" src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=240&q=70" alt="">
+          <div class="body">
+            <div class="cat" style="color:var(--c-wasser)"><span class="dot" style="background:var(--c-wasser)"></span>Wasser</div>
+            <h3 class="serif">Schwarzer See</h3>
+            <p>Größter Gletschersee der Šumava — tiefdunkel und sagenumwoben.</p>
+            <span class="tip">★ Geheimtipp</span>
+          </div>
+        </div>
+
+        <div class="poi">
+          <img class="thumb" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=240&q=70" alt="">
+          <div class="body">
+            <div class="cat" style="color:var(--c-natur)"><span class="dot" style="background:var(--c-natur)"></span>Natur</div>
+            <h3 class="serif">Silberberg Bodenmais</h3>
+            <p>Historisches Besucherbergwerk zum Erkunden tief unter Tage.</p>
+          </div>
+        </div>
+
+        <div class="poi">
+          <img class="thumb" src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=240&q=70" alt="">
+          <div class="body">
+            <div class="cat" style="color:var(--c-aussicht)"><span class="dot" style="background:var(--c-aussicht)"></span>Aussicht</div>
+            <h3 class="serif">Pancíř</h3>
+            <p>Aussichtsberg mit Blick über Šumava und den Bayerischen Wald.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Map -->
+    <section class="map">
+      <svg class="bg" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#F4F1E6"/><stop offset="1" stop-color="#EAF0E2"/>
+          </linearGradient>
+          <linearGradient id="riverg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#BFD9DE"/><stop offset="1" stop-color="#A7CBD6"/>
+          </linearGradient>
+        </defs>
+        <rect width="900" height="700" fill="url(#sky)"/>
+        <!-- soft forest masses -->
+        <path d="M-40 470 C120 410 200 520 340 480 C470 444 540 540 700 500 C820 470 900 520 960 500 L960 740 L-40 740 Z" fill="#DDE7CF"/>
+        <path d="M-40 560 C140 520 260 600 430 565 C600 530 700 610 960 575 L960 740 L-40 740 Z" fill="#CFDEC0"/>
+        <path d="M120 120 C200 80 300 110 340 170 C380 230 320 280 250 270 C170 258 60 180 120 120 Z" fill="#E2E9D4"/>
+        <path d="M620 90 C720 60 820 120 800 200 C784 264 690 270 640 220 C586 166 560 110 620 90 Z" fill="#E2E9D4"/>
+        <!-- lake -->
+        <ellipse cx="250" cy="300" rx="70" ry="44" fill="url(#riverg)"/>
+        <ellipse cx="690" cy="430" rx="52" ry="34" fill="url(#riverg)"/>
+        <!-- river -->
+        <path d="M-20 360 C160 330 240 420 420 380 C600 340 700 430 940 400" fill="none" stroke="url(#riverg)" stroke-width="14" stroke-linecap="round" opacity="0.9"/>
+        <!-- border DE / CZ -->
+        <path d="M470 -20 C500 160 430 330 520 470 C560 540 520 640 560 720" fill="none" stroke="#B9A98A" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round" opacity="0.8"/>
+      </svg>
+
+      <div class="maplabel" style="left:120px;top:60px">Bayern · DE</div>
+      <div class="maplabel" style="right:120px;top:64px">Čechy · CZ</div>
+
+      <!-- pins -->
+      <div class="pin big secret" style="left:40%;top:54%;--pc:var(--gold)"><span class="star">★</span><div class="head"></div></div>
+      <div class="pin" style="left:30%;top:34%;--pc:var(--c-aussicht)"><div class="head"></div></div>
+      <div class="pin secret" style="left:54%;top:30%;--pc:var(--gold)"><span class="star">★</span><div class="head"></div></div>
+      <div class="pin secret" style="left:67%;top:60%;--pc:var(--gold)"><span class="star">★</span><div class="head"></div></div>
+      <div class="pin" style="left:24%;top:62%;--pc:var(--c-natur)"><div class="head"></div></div>
+      <div class="pin" style="left:74%;top:40%;--pc:var(--c-aussicht)"><div class="head"></div></div>
+      <div class="pin" style="left:50%;top:74%;--pc:var(--c-kultur)"><div class="head"></div></div>
+
+      <!-- selected detail -->
+      <div class="detail">
+        <div class="hero">
+          <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=700&q=72" alt="">
+          <div class="grad"></div>
+          <button class="close">
+            <svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+          <div class="tags">
+            <span class="badge" style="background:var(--c-wasser)">Wasser</span>
+            <span class="badge gold">★ Geheimtipp</span>
+          </div>
+        </div>
+        <div class="pad">
+          <h3 class="serif">Rißlochfälle</h3>
+          <div class="loc">
+            <svg class="ic" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Bodenmais · Landkreis Regen
+          </div>
+          <p class="desc">Über mehrere Kaskaden stürzt der Rißbach durch eine moosgrüne Schlucht — einer der schönsten Wasserfälle des Bayerischen Waldes und ein echter Geheimtipp.</p>
+          <div class="actions">
+            <button class="btn primary">
+              <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg>
+              Stempel sammeln
+            </button>
+            <button class="btn ghost">
+              <svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a4 4 0 000-8H9a4 4 0 010-8h7"/></svg>
+              Route
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button>+</button><button>−</button>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="mockup-tag">Mockup · Karte</div>
+</body>
+</html>

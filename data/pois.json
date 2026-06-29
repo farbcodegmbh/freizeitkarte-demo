@@ -1,0 +1,98 @@
+{
+  "source": "BayernCloud Tourismus API v4 (data.bayerncloud.digital)",
+  "fetchedLive": true,
+  "region": "Lindberg / Nationalpark Bayerischer Wald (LK Regen)",
+  "count": 3,
+  "pois": [
+    {
+      "id": "ba8056ce-94d2-4d20-ac6e-5b73bf67fc62",
+      "slug": "grosser-falkenstein",
+      "name": "Großer Falkenstein",
+      "lat": 49.08499748903518,
+      "lon": 13.280056715011597,
+      "locality": "Lindberg",
+      "postalCode": "94227",
+      "street": "Waldhausstraße 2",
+      "description": "Auf dem Gipfel des 1315 Meter hohen Großen Falkensteins samt glasgeschmücktem Gipfelkreuz öffnet sich der Ausblick nach Westen und Südwesten zum Großen Arber und zur Bergkette des Vorderen Bayerischen Waldes. Direkt zu Füßen liegt der Talkessel des Zwieseler Winkels. Etwas unterhalb des Gipfels befindet sich das Falkensteinschutzhaus, das nahezu ganzjährig geöffnet ist.",
+      "languages": [
+        "de"
+      ],
+      "image": "https://data.bayerncloud.digital/asset/1970c7a3-a80c-4bce-96b2-1a5392c1183f/hxGahKbxcNKMQJneHGQRe1-PiY5kq0y5ArmmuRjaaiA/1739446435/default/falkensteingipfel.jpg",
+      "thumb": "https://data.bayerncloud.digital/asset/1970c7a3-a80c-4bce-96b2-1a5392c1183f/sAmxFhjTaaUbQYToXYRgZikwAhPzD84fxKP_yLvGLzQ/1739446435/thumb/falkensteingipfel",
+      "imageName": "Falkensteingipfel",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "copyright": "CC BY-SA 4.0 Martin Stadler",
+      "contentScore": [
+        {
+          "@type": "PropertyValue",
+          "identifier": "internalContentScore",
+          "name": "Interner Content Score",
+          "@id": "ba8056ce-94d2-4d20-ac6e-68abac8c015b",
+          "value": 100.0,
+          "minValue": 0,
+          "maxValue": 100
+        }
+      ]
+    },
+    {
+      "id": "e8baba8b-25a0-4f6f-9d5b-c40cc3f7ceb8",
+      "slug": "lindberger-schachten",
+      "name": "Lindberger Schachten",
+      "lat": 49.03944340122627,
+      "lon": 13.365898132324219,
+      "locality": "Lindberg",
+      "postalCode": "94227",
+      "street": "Buchenau 45",
+      "description": "Mit einer Größe von neun Hektar ist der Lindberger Schachten der drittgrößte Schachten im Nationalpark Bayerischer Wald. Während des Aufstieges von Buchenau aus lohnt sich immer wieder ein Blick zurück. Bei gutem Wetter bietet sich ein grandioser Ausblick auf den Rachel. Auf dem Lindberger Schachten, der erstmals 1619 erwähnt wurde und zu beinahe 70 Prozent mit Heidelbeeren bedeckt ist, steht eine Schutzhütte, die zu einer Rast einlädt.",
+      "languages": [
+        "de"
+      ],
+      "image": "https://data.bayerncloud.digital/asset/e300813e-e32e-4440-93d9-471765d53ff9/YDXDZa6D5YS0uPX0uzV5KWU1pGAQSPoBw5A6sKvG9yo/1739450397/default/schachten.jpg",
+      "thumb": "https://data.bayerncloud.digital/asset/e300813e-e32e-4440-93d9-471765d53ff9/XOAuuq6mIhEeWDcB8bSycnBcIu9H2HiZ_T5tzcjeK_0/1739450397/thumb/schachten",
+      "imageName": "Schachten",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "copyright": "CC BY-SA 4.0 Martin Stadler",
+      "contentScore": [
+        {
+          "@type": "PropertyValue",
+          "identifier": "internalContentScore",
+          "name": "Interner Content Score",
+          "@id": "e8baba8b-25a0-4f6f-9d5b-f7d4d01c3381",
+          "value": 100.0,
+          "minValue": 0,
+          "maxValue": 100
+        }
+      ]
+    },
+    {
+      "id": "f0b953ce-adce-4a60-9951-049965f32e23",
+      "slug": "ruckowitzschachten",
+      "name": "Ruckowitzschachten",
+      "lat": 49.10208004385835,
+      "lon": 13.274649381637573,
+      "locality": "Lindberg",
+      "postalCode": "94227",
+      "street": "Zwieslerwaldhaus 51",
+      "description": "Die größte noch erhaltene einstige Waldweide im Nationalpark Bayerischer Wald ist der Ruckowitzschachten auf dem Höhenkamm des Falkensteinmassivs gelegen. Der Name geht aus einem Hörfehler der Kartographen hervor. Die interpretierten die Aussprache der Einheimischen falsch - eigentlich wurde der Schachten \"Ruckawies\" genannt, was nichts anderes als Bergrückenwiese bedeutet. Seit 2014 wird die Fläche im Sommer wieder mehrere Wochen lang beweidet - durch eine kleine Herde Rotes Höhenvieh.",
+      "languages": [
+        "de"
+      ],
+      "image": "https://data.bayerncloud.digital/asset/f4d04dfc-536f-419b-8269-e0a2d4283666/xhvT34t_frNfM1f1YWNlnGh7p_GgGBtSvn0RHMxJXY0/1739450766/default/ruckowitzschachten.jpg",
+      "thumb": "https://data.bayerncloud.digital/asset/f4d04dfc-536f-419b-8269-e0a2d4283666/VJmqoGxjXH9nMdbNQnIlVio1_5eJXIVJUwXcgBpBNOE/1739450766/thumb/ruckowitzschachten",
+      "imageName": "Ruckowitzschachten",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "copyright": "CC BY-SA 4.0 Martin Stadler",
+      "contentScore": [
+        {
+          "@type": "PropertyValue",
+          "identifier": "internalContentScore",
+          "name": "Interner Content Score",
+          "@id": "f0b953ce-adce-4a60-9951-37417618d31a",
+          "value": 100.0,
+          "minValue": 0,
+          "maxValue": 100
+        }
+      ]
+    }
+  ]
+}

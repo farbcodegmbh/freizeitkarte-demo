@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grenzraum entdecken — CMS: Ziel bearbeiten (Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EE; --surface:#FFFFFF; --ink:#21302A; --muted:#74807A; --faint:#9AA49E;
+    --line:#EAE3D6; --line-soft:#F1ECE2;
+    --pine:#1D5A43; --pine-d:#16493B; --sand:#F3ECDD; --gold:#C68A2E; --gold-soft:#F2E2C2;
+    --c-wasser:#2C8B9C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
+  svg.ic{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .admin{display:flex;height:100vh}
+
+  /* sidebar */
+  .nav{flex:0 0 232px;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px}
+  .nav .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 18px}
+  .nav .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(150deg,#2c6f54,#143f30);display:grid;place-items:center;color:#fff}
+  .nav .brand b{font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+  .nav .brand span{font-size:11px;color:var(--muted);display:block;margin-top:1px}
+  .nav .grp{font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:14px 10px 6px}
+  .nav a{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:11px;color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:450}
+  .nav a svg{width:18px;height:18px;color:var(--muted)}
+  .nav a:hover{background:var(--sand)}
+  .nav a.on{background:#EBF1E8;color:var(--pine);font-weight:600}
+  .nav a.on svg{color:var(--pine)}
+  .nav .user{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--line-soft)}
+  .nav .ava{width:32px;height:32px;border-radius:50%;background:var(--gold-soft);color:#7a5512;display:grid;place-items:center;font-size:12px;font-weight:700}
+  .nav .user .t{font-size:12.5px;font-weight:500}
+  .nav .user .r{font-size:11px;color:var(--muted)}
+
+  /* content */
+  .content{flex:1;display:flex;flex-direction:column;min-width:0}
+  .topbar{display:flex;align-items:center;gap:14px;padding:14px 28px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.7);backdrop-filter:blur(6px)}
+  .crumb{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+  .crumb b{color:var(--ink);font-weight:600}
+  .crumb svg{width:14px;height:14px;color:var(--faint)}
+  .status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#8a6d12;background:#FBF1DA;padding:5px 11px;border-radius:999px}
+  .status .d{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+  .grow{flex:1}
+  .btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:500;font-size:13.5px;padding:9px 16px;border-radius:11px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .btn svg{width:16px;height:16px}
+  .btn:hover{background:var(--sand)}
+  .btn.primary{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .btn.primary:hover{background:var(--pine-d)}
+
+  .work{flex:1;display:flex;gap:26px;padding:26px 28px;overflow:auto}
+  .form{flex:1;max-width:680px;display:flex;flex-direction:column;gap:18px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 22px;box-shadow:0 10px 26px -20px rgba(30,50,40,.25)}
+  .card h3{font-size:13px;font-weight:600;letter-spacing:.02em;display:flex;align-items:center;gap:9px}
+  .card h3 svg{width:16px;height:16px;color:var(--pine)}
+  .card .hint{font-size:12px;color:var(--muted);margin-top:3px;margin-left:25px}
+
+  .langtabs{display:inline-flex;gap:3px;background:var(--sand);padding:3px;border-radius:11px;margin:14px 0 16px}
+  .langtabs button{font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);background:none;border:0;padding:6px 14px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:6px}
+  .langtabs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .langtabs .flag{font-size:13px}
+
+  .field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}
+  .field:last-child{margin-bottom:0}
+  .field label{font-size:13px;font-weight:500}
+  .field label .opt{color:var(--faint);font-weight:400}
+  .input,.textarea,.select{width:100%;font:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+  .input:focus,.textarea:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(29,90,67,.12)}
+  .textarea{min-height:96px;resize:none;line-height:1.5}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+
+  .selectrow{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:11px;padding:10px 13px;font-size:14px;background:#fff;cursor:pointer}
+  .selectrow .l{display:flex;align-items:center;gap:9px}
+  .selectrow .dot{width:10px;height:10px;border-radius:50%}
+  .selectrow svg{width:16px;height:16px;color:var(--muted)}
+
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+  .seg button{font:inherit;font-size:13px;font-weight:500;color:var(--muted);background:#fff;border:0;border-right:1px solid var(--line);padding:9px 15px;cursor:pointer}
+  .seg button:last-child{border-right:0}
+  .seg button.on{background:var(--pine);color:#fff}
+
+  .switchrow{display:flex;align-items:center;justify-content:space-between}
+  .switchrow .lab{display:flex;flex-direction:column;gap:2px}
+  .switchrow .lab b{font-size:13.5px;font-weight:500}
+  .switchrow .lab span{font-size:12px;color:var(--muted)}
+  .switch{width:44px;height:26px;border-radius:999px;background:var(--pine);position:relative;cursor:pointer;flex:0 0 auto}
+  .switch i{position:absolute;top:3px;left:21px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+
+  .media{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+  .media .m{position:relative;border-radius:13px;overflow:hidden;aspect-ratio:1;border:1px solid var(--line-soft)}
+  .media .m img{width:100%;height:100%;object-fit:cover}
+  .media .m .lic{position:absolute;left:5px;bottom:5px;font-size:9.5px;font-weight:600;color:#fff;background:rgba(20,35,28,.7);padding:2px 7px;border-radius:999px;backdrop-filter:blur(2px)}
+  .media .m.cover::after{content:'Titelbild';position:absolute;top:5px;left:5px;font-size:9.5px;font-weight:600;color:#3c2a06;background:var(--gold);padding:2px 7px;border-radius:999px}
+  .media .add{border:1.5px dashed #D7D0C2;border-radius:13px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-size:11.5px;font-weight:500;cursor:pointer;background:#FCFAF5}
+  .media .add svg{width:20px;height:20px}
+
+  .mapmini{position:relative;height:170px;border-radius:13px;overflow:hidden;border:1px solid var(--line-soft);margin-top:14px}
+  .mapmini svg{width:100%;height:100%;display:block}
+  .mappin{position:absolute;left:46%;top:52%;transform:translate(-50%,-100%);filter:drop-shadow(0 5px 5px rgba(20,40,30,.3))}
+  .mappin .h{width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(45deg);background:var(--c-wasser);border:2.5px solid #fff}
+  .mapmini .coords{position:absolute;right:10px;bottom:10px;font-size:11px;color:#fff;background:rgba(20,35,28,.7);padding:4px 9px;border-radius:8px;backdrop-filter:blur(2px)}
+  .mapmini .drag{position:absolute;left:10px;top:10px;font-size:11px;color:var(--ink);background:rgba(255,255,255,.9);padding:4px 9px;border-radius:8px}
+
+  /* preview panel */
+  .preview{flex:0 0 312px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0}
+  .preview .lab{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+  .preview .lab svg{width:15px;height:15px}
+  .pvcard{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 16px 34px -22px rgba(30,50,40,.35);border:1px solid var(--line-soft)}
+  .pvcard .hero{position:relative;height:150px}
+  .pvcard .hero img{width:100%;height:100%;object-fit:cover}
+  .pvcard .tags{position:absolute;left:12px;bottom:11px;display:flex;gap:6px}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#fff;padding:3px 9px;border-radius:999px}
+  .badge.gold{background:var(--gold);color:#3c2a06}
+  .pvcard .pad{padding:14px 16px 16px}
+  .pvcard h4{font-size:18px;font-weight:500;letter-spacing:-.01em}
+  .pvcard .loc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);margin-top:4px}
+  .pvcard .loc svg{width:12px;height:12px}
+  .pvcard p{font-size:12.5px;color:#4c5852;line-height:1.5;margin-top:9px}
+  .pvnote{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="admin">
+
+  <!-- Sidebar -->
+  <aside class="nav">
+    <div class="brand">
+      <div class="logo"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M3 20l6-16 6 7 3-3 3 12z"/></svg></div>
+      <div><b>Grenzraum</b><span>Redaktion</span></div>
+    </div>
+    <div class="grp">Inhalte</div>
+    <a href="#" class="on"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Ziele</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Kategorien</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>Stempelstellen</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-4 4 3 4-5 5 6"/></svg>Medien</a>
+    <div class="grp">Verwaltung</div>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0114 0"/></svg>Nutzer &amp; Rechte</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19 12a7 7 0 00-.1-1l2-1.6-2-3.4-2.3 1a7 7 0 00-1.7-1l-.3-2.5H10.4l-.3 2.5a7 7 0 00-1.7 1l-2.3-1-2 3.4L6 11a7 7 0 000 2l-2 1.6 2 3.4 2.3-1a7 7 0 001.7 1l.3 2.5h3.2l.3-2.5a7 7 0 001.7-1l2.3 1 2-3.4-2-1.6c.1-.3.1-.7.1-1z"/></svg>Einstellungen</a>
+    <div class="user">
+      <div class="ava">SK</div>
+      <div><div class="t">Sabine K.</div><div class="r">Redakteurin</div></div>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="topbar">
+      <div class="crumb">
+        Ziele <svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg> <b>Rißlochfälle</b>
+      </div>
+      <span class="status"><span class="d"></span>Entwurf</span>
+      <div class="grow"></div>
+      <button class="btn"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12s-3.5 7-9 7-9-7-9-7 3.5-7 9-7 9 7 9 7z"/><circle cx="12" cy="12" r="2.5"/></svg>Vorschau</button>
+      <button class="btn"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg>Exportieren</button>
+      <button class="btn primary"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Veröffentlichen</button>
+    </div>
+
+    <div class="work">
+      <!-- Form -->
+      <div class="form">
+
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/></svg>Inhalt</h3>
+          <div class="hint">Texte je Sprache pflegen — Inhalte &amp; Übersetzungen stellt der Auftraggeber bereit.</div>
+
+          <div class="langtabs">
+            <button class="on"><span class="flag">🇩🇪</span>Deutsch</button>
+            <button><span class="flag">🇨🇿</span>Čeština</button>
+            <button><span class="flag">🇬🇧</span>English</button>
+          </div>
+
+          <div class="field">
+            <label>Name</label>
+            <input class="input" value="Rißlochfälle">
+          </div>
+          <div class="field">
+            <label>Kurzbeschreibung <span class="opt">· erscheint in der Liste</span></label>
+            <input class="input" value="Versteckte Wasserfälle in einer wildromantischen Schlucht bei Bodenmais.">
+          </div>
+          <div class="field">
+            <label>Beschreibung</label>
+            <textarea class="textarea">Über mehrere Kaskaden stürzt der Rißbach durch eine moosgrüne Schlucht — einer der schönsten Wasserfälle des Bayerischen Waldes und ein echter Geheimtipp.</textarea>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4zM3 7v10l9 4 9-4V7"/></svg>Einordnung</h3>
+          <div style="margin-top:15px" class="twocol">
+            <div class="field">
+              <label>Kategorie</label>
+              <div class="selectrow"><span class="l"><span class="dot" style="background:var(--c-wasser)"></span>Wasser</span><svg class="ic" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+            </div>
+            <div class="field">
+              <label>Hervorhebung</label>
+              <div class="seg"><button>Standard</button><button class="on">Hervorgehoben</button><button>Top</button></div>
+            </div>
+          </div>
+          <div class="switchrow" style="margin-top:6px">
+            <div class="lab"><b>Geheimtipp</b><span>Erhält eine QR-Stempelstelle vor Ort</span></div>
+            <div class="switch"><i></i></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-4 4 3 4-5 5 6"/></svg>Medien</h3>
+          <div class="hint">Bilder mit Urheber &amp; Lizenz — Creative-Commons-konform für die BayernCloud.</div>
+          <div class="media">
+            <div class="m cover"><img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=240&q=70" alt=""><span class="lic">CC BY</span></div>
+            <div class="m"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=240&q=70" alt=""><span class="lic">CC BY-SA</span></div>
+            <div class="m"><img src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=240&q=70" alt=""><span class="lic">CC0</span></div>
+            <div class="add"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Bild hinzufügen</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Standort</h3>
+          <div class="hint">Pin auf die Karte ziehen, um die Position zu setzen.</div>
+          <div class="mapmini">
+            <svg viewBox="0 0 500 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <rect width="500" height="200" fill="#EAF0E2"/>
+              <path d="M-20 130 C90 100 160 150 260 130 C360 110 420 150 520 135 L520 220 L-20 220Z" fill="#DCE7CE"/>
+              <path d="M-20 165 C120 140 220 180 360 160 C440 150 500 165 520 160 L520 220 L-20 220Z" fill="#CFDEC0"/>
+              <ellipse cx="120" cy="80" rx="46" ry="26" fill="#BFD9DE"/>
+              <path d="M-10 95 C120 80 200 120 320 100 C420 84 480 110 520 100" fill="none" stroke="#B4D2D9" stroke-width="9" stroke-linecap="round"/>
+            </svg>
+            <div class="drag">↔ verschieben</div>
+            <div class="mappin"><div class="h"></div></div>
+            <div class="coords">49.0452, 13.1181</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Preview -->
+      <div class="preview">
+        <div class="lab"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12s-3.5 7-9 7-9-7-9-7 3.5-7 9-7 9 7 9 7z"/><circle cx="12" cy="12" r="2.5"/></svg>Live-Vorschau</div>
+        <div class="pvcard">
+          <div class="hero">
+            <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=600&q=72" alt="">
+            <div class="tags">
+              <span class="badge" style="background:var(--c-wasser)">Wasser</span>
+              <span class="badge gold">★ Geheimtipp</span>
+            </div>
+          </div>
+          <div class="pad">
+            <h4 class="serif">Rißlochfälle</h4>
+            <div class="loc"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Bodenmais · Landkreis Regen</div>
+            <p>Versteckte Wasserfälle in einer wildromantischen Schlucht bei Bodenmais.</p>
+          </div>
+        </div>
+        <div class="pvnote">So erscheint das Ziel auf der Karte<br>und im Stempelpass.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

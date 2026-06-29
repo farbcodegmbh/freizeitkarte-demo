@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grenzraum entdecken — Login (Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EE;--surface:#FFFFFF;--ink:#21302A;--muted:#74807A;--faint:#9AA49E;
+    --line:#EAE3D6;--line-soft:#F1ECE2;--pine:#1D5A43;--pine-d:#16493B;--sand:#F3ECDD;--gold:#C68A2E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(1100px 520px at 50% -10%, #EEF2E5, transparent 70%), var(--bg);min-height:100vh}
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
+  svg.ic{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .page{max-width:1000px;margin:0 auto;padding:46px 24px 70px}
+  .page-head{text-align:center;margin-bottom:38px}
+  .page-head .eyebrow{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .page-head h1{font-size:34px;font-weight:500;letter-spacing:-.02em;margin-top:8px}
+  .row{display:flex;gap:48px;justify-content:center;align-items:flex-start;flex-wrap:wrap}
+  .col{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .caption{font-size:13px;color:var(--muted)}.caption b{color:var(--ink);font-weight:600}
+
+  .phone{width:300px;height:632px;background:#1c1c1e;border-radius:46px;padding:9px;box-shadow:0 40px 70px -30px rgba(25,45,35,.5),0 8px 20px -10px rgba(25,45,35,.3)}
+  .screen{position:relative;width:100%;height:100%;border-radius:38px;overflow:hidden;background:var(--bg)}
+  .island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:84px;height:22px;background:#000;border-radius:999px;z-index:40}
+  .statusbar{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:13px;font-weight:600;z-index:30}
+  .statusbar .r{display:flex;gap:6px}.statusbar svg{width:16px;height:16px}
+  .btn{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:500;font-size:14.5px;padding:14px;border-radius:14px;cursor:pointer;border:1px solid transparent}
+  .btn.primary{background:var(--pine);color:#fff}
+  .btn.light{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.3);backdrop-filter:blur(4px)}
+  .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+
+  /* welcome */
+  .welcome .screen{background:#10201a}
+  .welcome .bgimg{position:absolute;inset:0}
+  .welcome .bgimg img{width:100%;height:100%;object-fit:cover;filter:brightness(.62) saturate(.95)}
+  .welcome .bgimg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,15,.35),rgba(10,20,15,.25) 40%,rgba(8,16,12,.86))}
+  .welcome .body{position:absolute;inset:0;top:44px;display:flex;flex-direction:column;padding:24px 22px 26px;color:#fff}
+  .welcome .logo{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);display:grid;place-items:center;border:1px solid rgba(255,255,255,.25)}
+  .welcome .logo svg{width:24px;height:24px}
+  .welcome .mid{margin-top:auto}
+  .welcome .eyebrow{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+  .welcome h2{font-size:30px;font-weight:500;line-height:1.12;margin-top:10px}
+  .welcome .sub{font-size:14px;color:rgba(255,255,255,.82);line-height:1.5;margin-top:10px}
+  .welcome .acts{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+  .welcome .guest{text-align:center;font-size:13px;color:rgba(255,255,255,.8);margin-top:14px}
+  .welcome .guest u{text-underline-offset:3px}
+
+  /* register */
+  .reg .body{position:absolute;inset:0;top:44px;display:flex;flex-direction:column;padding:8px 22px 22px}
+  .reg .back{width:36px;height:36px;border-radius:50%;background:var(--sand);display:grid;place-items:center;margin-bottom:14px}
+  .reg .back svg{width:18px;height:18px}
+  .reg h2{font-size:26px;font-weight:500;letter-spacing:-.01em}
+  .reg .sub{font-size:13.5px;color:var(--muted);margin-top:6px}
+  .field{display:flex;flex-direction:column;gap:7px;margin-top:15px}
+  .field label{font-size:12.5px;font-weight:500}
+  .input{width:100%;font:inherit;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 13px;color:var(--ink)}
+  .input.focus{border-color:var(--pine);box-shadow:0 0 0 3px rgba(29,90,67,.12)}
+  .pwrow{position:relative}.pwrow .eye{position:absolute;right:12px;top:12px;color:var(--faint)}.pwrow .eye svg{width:17px;height:17px}
+  .consent{display:flex;gap:10px;margin-top:16px;font-size:11.5px;color:var(--muted);line-height:1.45}
+  .consent .box{width:19px;height:19px;border-radius:6px;background:var(--pine);display:grid;place-items:center;flex:0 0 auto;color:#fff}
+  .consent .box svg{width:13px;height:13px}
+  .consent a{color:var(--pine);text-underline-offset:2px}
+  .reg .btn{margin-top:auto}
+  .reg .alt{text-align:center;font-size:12.5px;color:var(--muted);margin-top:13px}
+  .reg .alt b{color:var(--pine);font-weight:600}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-head">
+    <div class="eyebrow">Grenzraum entdecken</div>
+    <h1 class="serif">Konto &amp; Anmeldung</h1>
+  </div>
+  <div class="row">
+
+    <!-- Welcome -->
+    <div class="col">
+      <div class="phone welcome">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="statusbar" style="color:#fff"><span>9:41</span><span class="r">
+            <svg class="ic" viewBox="0 0 24 24"><path d="M2 20h.01M6 20v-3M10 20v-6M14 20v-9M18 20v-12"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><path d="M5 13a10 10 0 0114 0M8.5 16.5a5 5 0 017 0M12 20h.01"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><rect x="2" y="8" width="18" height="9" rx="2"/><path d="M22 11v3"/></svg></span></div>
+          <div class="bgimg"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=72" alt=""></div>
+          <div class="body">
+            <div class="logo"><svg class="ic" viewBox="0 0 24 24"><path d="M3 20l6-16 6 7 3-3 3 12z"/></svg></div>
+            <div class="mid">
+              <div class="eyebrow">Grenzraum entdecken</div>
+              <h2 class="serif">Sammle die Geheimtipps des Grenzraums.</h2>
+              <div class="sub">Lege deinen digitalen Stempelpass an und halte fest, welche Ziele du schon entdeckt hast.</div>
+              <div class="acts">
+                <button class="btn primary">Stempelpass starten</button>
+                <button class="btn light">Ich habe schon ein Konto</button>
+              </div>
+              <div class="guest"><u>Erstmal als Gast erkunden</u></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><b>Willkommen</b> — Einstieg &amp; Gast-Option</div>
+    </div>
+
+    <!-- Register -->
+    <div class="col">
+      <div class="phone reg">
+        <div class="screen">
+          <div class="island"></div>
+          <div class="statusbar"><span>9:41</span><span class="r">
+            <svg class="ic" viewBox="0 0 24 24"><path d="M2 20h.01M6 20v-3M10 20v-6M14 20v-9M18 20v-12"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><path d="M5 13a10 10 0 0114 0M8.5 16.5a5 5 0 017 0M12 20h.01"/></svg>
+            <svg class="ic" viewBox="0 0 24 24"><rect x="2" y="8" width="18" height="9" rx="2"/><path d="M22 11v3"/></svg></span></div>
+          <div class="body">
+            <div class="back"><svg class="ic" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
+            <h2 class="serif">Konto erstellen</h2>
+            <div class="sub">Schnell startklar — nur E-Mail genügt.</div>
+            <div class="field"><label>Vorname</label><input class="input" value="Lena"></div>
+            <div class="field"><label>E-Mail</label><input class="input focus" value="lena@example.de"></div>
+            <div class="field"><label>Passwort</label>
+              <div class="pwrow"><input class="input" type="password" value="········">
+                <span class="eye"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12s-3.5 7-9 7-9-7-9-7 3.5-7 9-7 9 7 9 7z"/><circle cx="12" cy="12" r="2.5"/></svg></span></div>
+            </div>
+            <div class="consent">
+              <span class="box"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>
+              <span>Ich habe die <a>Datenschutzhinweise</a> gelesen und bin mit der Verarbeitung meiner Daten einverstanden.</span>
+            </div>
+            <button class="btn primary">Konto erstellen</button>
+            <div class="alt">Schon dabei? <b>Anmelden</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><b>Registrieren</b> — E-Mail + DSGVO-Einwilligung</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

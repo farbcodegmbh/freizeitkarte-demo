@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grenzraum entdecken — CMS: Ziele (Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EE;--surface:#FFFFFF;--ink:#21302A;--muted:#74807A;--faint:#9AA49E;
+    --line:#EAE3D6;--line-soft:#F1ECE2;--pine:#1D5A43;--pine-d:#16493B;--sand:#F3ECDD;
+    --gold:#C68A2E;--gold-soft:#F2E2C2;
+    --c-natur:#3E7C4E;--c-aussicht:#2E6E8E;--c-kultur:#7C5AA6;--c-wasser:#2C8B9C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
+  svg.ic{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .admin{display:flex;height:100vh}
+
+  .nav{flex:0 0 232px;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px}
+  .nav .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 18px}
+  .nav .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(150deg,#2c6f54,#143f30);display:grid;place-items:center;color:#fff}
+  .nav .brand b{font-size:14.5px;font-weight:600}.nav .brand span{font-size:11px;color:var(--muted);display:block;margin-top:1px}
+  .nav .grp{font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:14px 10px 6px}
+  .nav a{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:11px;color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:450}
+  .nav a svg{width:18px;height:18px;color:var(--muted)}
+  .nav a:hover{background:var(--sand)}
+  .nav a.on{background:#EBF1E8;color:var(--pine);font-weight:600}.nav a.on svg{color:var(--pine)}
+  .nav .user{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--line-soft)}
+  .nav .ava{width:32px;height:32px;border-radius:50%;background:var(--gold-soft);color:#7a5512;display:grid;place-items:center;font-size:12px;font-weight:700}
+  .nav .user .t{font-size:12.5px;font-weight:500}.nav .user .r{font-size:11px;color:var(--muted)}
+
+  .content{flex:1;display:flex;flex-direction:column;min-width:0}
+  .topbar{display:flex;align-items:center;gap:14px;padding:18px 28px 14px}
+  .topbar h1{font-size:24px;font-weight:500;letter-spacing:-.01em}
+  .topbar .count{font-size:13px;color:var(--muted);background:var(--sand);padding:3px 10px;border-radius:999px;font-weight:500}
+  .grow{flex:1}
+  .search{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px 13px;width:240px;color:var(--faint)}
+  .search input{border:0;outline:0;font:inherit;font-size:13.5px;color:var(--ink);width:100%;background:none}
+  .search svg{width:16px;height:16px;flex:0 0 auto}
+  .btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:500;font-size:13.5px;padding:9px 16px;border-radius:11px;cursor:pointer;border:1px solid var(--pine);background:var(--pine);color:#fff}
+  .btn svg{width:16px;height:16px}
+  .btn:hover{background:var(--pine-d)}
+
+  .stats{display:flex;gap:14px;padding:0 28px 14px}
+  .stat{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:15px 18px}
+  .stat .k{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .stat .k svg{width:15px;height:15px;color:var(--pine)}
+  .stat .v{font-family:'Fraunces',serif;font-size:27px;font-weight:600;margin-top:6px;letter-spacing:-.02em}
+  .stat .v small{font-size:13px;color:var(--faint);font-family:'Inter';font-weight:500}
+
+  .tablewrap{margin:2px 28px 26px;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;flex:1;display:flex;flex-direction:column;min-height:0}
+  .thead,.trow{display:grid;grid-template-columns:3fr 1.4fr 1.3fr 1.3fr 1fr 36px;align-items:center;gap:12px;padding:13px 20px}
+  .thead{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);border-bottom:1px solid var(--line)}
+  .tbody{overflow-y:auto}
+  .trow{border-bottom:1px solid var(--line-soft);cursor:pointer}
+  .trow:hover{background:#FCFAF5}
+  .trow:last-child{border-bottom:0}
+  .ziel{display:flex;align-items:center;gap:13px;min-width:0}
+  .ziel img{width:50px;height:50px;border-radius:11px;object-fit:cover;flex:0 0 auto}
+  .ziel .nm{font-size:14.5px;font-weight:500;display:flex;align-items:center;gap:7px}
+  .ziel .nm .star{color:var(--gold);font-size:12px}
+  .ziel .rg{font-size:12px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:5px}
+  .ziel .rg svg{width:12px;height:12px}
+  .cat{display:inline-flex;align-items:center;gap:7px;font-size:13px}
+  .cat .dot{width:9px;height:9px;border-radius:50%}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px}
+  .pill.pub{background:#EBF1E8;color:var(--pine)}
+  .pill.draft{background:#FBF1DA;color:#8a6d12}
+  .pill .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+  .stamps{font-size:13px;color:var(--ink)}
+  .stamps span{color:var(--faint)}
+  .chev{color:var(--faint)}.chev svg{width:18px;height:18px}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="nav">
+    <div class="brand">
+      <div class="logo"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M3 20l6-16 6 7 3-3 3 12z"/></svg></div>
+      <div><b>Grenzraum</b><span>Redaktion</span></div>
+    </div>
+    <div class="grp">Inhalte</div>
+    <a href="#" class="on"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Ziele</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Kategorien</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>Stempelstellen</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-4 4 3 4-5 5 6"/></svg>Medien</a>
+    <div class="grp">Verwaltung</div>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0114 0"/></svg>Nutzer &amp; Rechte</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 13a7.9 7.9 0 000-2l2-1.5-2-3.5-2.4 1a8 8 0 00-1.7-1L17 3h-4l-.3 2.5a8 8 0 00-1.7 1l-2.4-1-2 3.5L6.6 11a7.9 7.9 0 000 2l-2 1.5 2 3.5 2.4-1a8 8 0 001.7 1L13 21h4l-.6-2.5a8 8 0 001.7-1l2.4 1 2-3.5z"/></svg>Einstellungen</a>
+    <div class="user"><div class="ava">SK</div><div><div class="t">Sabine K.</div><div class="r">Redakteurin</div></div></div>
+  </aside>
+
+  <div class="content">
+    <div class="topbar">
+      <h1 class="serif">Ziele</h1>
+      <span class="count">24 Ziele</span>
+      <div class="grow"></div>
+      <div class="search">
+        <svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input placeholder="Ziel suchen…">
+      </div>
+      <button class="btn"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Neues Ziel</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Ziele gesamt</div><div class="v">24</div></div>
+      <div class="stat"><div class="k"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg>Geheimtipps</div><div class="v">8</div></div>
+      <div class="stat"><div class="k"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>Stempelstellen</div><div class="v">8</div></div>
+      <div class="stat"><div class="k"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>Veröffentlicht</div><div class="v">19 <small>/ 24</small></div></div>
+    </div>
+
+    <div class="tablewrap">
+      <div class="thead">
+        <div>Ziel</div><div>Kategorie</div><div>Region</div><div>Status</div><div>Stempel</div><div></div>
+      </div>
+      <div class="tbody">
+
+        <div class="trow">
+          <div class="ziel"><img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=120&q=70" alt="">
+            <div><div class="nm">Rißlochfälle <span class="star">★</span></div><div class="rg"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/></svg>Bodenmais</div></div></div>
+          <div class="cat"><span class="dot" style="background:var(--c-wasser)"></span>Wasser</div>
+          <div>Lkr. Regen</div>
+          <div><span class="pill draft"><span class="d"></span>Entwurf</span></div>
+          <div class="stamps">142</div>
+          <div class="chev"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+
+        <div class="trow">
+          <div class="ziel"><img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=120&q=70" alt="">
+            <div><div class="nm">Großer Arber</div><div class="rg"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/></svg>Bayerisch Eisenstein</div></div></div>
+          <div class="cat"><span class="dot" style="background:var(--c-aussicht)"></span>Aussicht</div>
+          <div>Lkr. Regen</div>
+          <div><span class="pill pub"><span class="d"></span>Veröffentlicht</span></div>
+          <div class="stamps"><span>—</span></div>
+          <div class="chev"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+
+        <div class="trow">
+          <div class="ziel"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=120&q=70" alt="">
+            <div><div class="nm">Kleiner Arbersee <span class="star">★</span></div><div class="rg"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/></svg>Lohberg</div></div></div>
+          <div class="cat"><span class="dot" style="background:var(--c-natur)"></span>Natur</div>
+          <div>Lkr. Regen</div>
+          <div><span class="pill pub"><span class="d"></span>Veröffentlicht</span></div>
+          <div class="stamps">98</div>
+          <div class="chev"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+
+        <div class="trow">
+          <div class="ziel"><img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=120&q=70" alt="">
+            <div><div class="nm">Schwarzer See <span class="star">★</span></div><div class="rg"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/></svg>Železná Ruda</div></div></div>
+          <div class="cat"><span class="dot" style="background:var(--c-wasser)"></span>Wasser</div>
+          <div>Bez. Klattau</div>
+          <div><span class="pill pub"><span class="d"></span>Veröffentlicht</span></div>
+          <div class="stamps">76</div>
+          <div class="chev"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+
+        <div class="trow">
+          <div class="ziel"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=120&q=70" alt="">
+            <div><div class="nm">Silberberg Bodenmais</div><div class="rg"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/></svg>Bodenmais</div></div></div>
+          <div class="cat"><span class="dot" style="background:var(--c-natur)"></span>Natur</div>
+          <div>Lkr. Regen</div>
+          <div><span class="pill pub"><span class="d"></span>Veröffentlicht</span></div>
+          <div class="stamps"><span>—</span></div>
+          <div class="chev"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+
+        <div class="trow">
+          <div class="ziel"><img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=120&q=70" alt="">
+            <div><div class="nm">Pancíř</div><div class="rg"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/></svg>Železná Ruda</div></div></div>
+          <div class="cat"><span class="dot" style="background:var(--c-aussicht)"></span>Aussicht</div>
+          <div>Bez. Klattau</div>
+          <div><span class="pill draft"><span class="d"></span>Entwurf</span></div>
+          <div class="stamps"><span>—</span></div>
+          <div class="chev"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+
+        <div class="trow">
+          <div class="ziel"><img src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=120&q=70" alt="">
+            <div><div class="nm">Glasmuseum Frauenau</div><div class="rg"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/></svg>Frauenau</div></div></div>
+          <div class="cat"><span class="dot" style="background:var(--c-kultur)"></span>Kultur</div>
+          <div>Lkr. Regen</div>
+          <div><span class="pill pub"><span class="d"></span>Veröffentlicht</span></div>
+          <div class="stamps"><span>—</span></div>
+          <div class="chev"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
