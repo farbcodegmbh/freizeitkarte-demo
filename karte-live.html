@@ -78,9 +78,9 @@
   #map{position:absolute;inset:0}
   .maplibregl-popup{display:none}
   .marker{transform:translate(-50%,-100%);cursor:pointer;filter:drop-shadow(0 6px 6px rgba(20,40,30,.25))}
-  .marker .head{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(45deg);
+  .marker .head{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
     background:var(--pc,#3E7C4E);border:2.5px solid #fff;display:grid;place-items:center;transition:.15s}
-  .marker .head::after{content:'';width:9px;height:9px;border-radius:50%;background:#fff;transform:rotate(-45deg)}
+  .marker .head::after{content:'';width:9px;height:9px;border-radius:50%;background:#fff;transform:rotate(45deg)}
   .marker.active .head{width:34px;height:34px}
   .marker.active{filter:drop-shadow(0 12px 14px rgba(20,40,30,.34));z-index:5}
 
