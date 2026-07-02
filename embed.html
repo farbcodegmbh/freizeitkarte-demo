@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Grenzraum entdecken — Einbettung (Mockup)</title>
+<title>Grenzraum entdecken — Einbettung: Live-Karte per iframe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
@@ -100,53 +100,17 @@
 
       <div class="embed-note">
         <span class="tag"><svg class="ic" viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 6l-2 12"/></svg>Eingebettetes Modul</span>
-        läuft auf der Bestandswebsite der Region — dreisprachig, ohne Programmierung integrierbar
+        unten keine Illustration: die Live-Karte dieses Angebots (echte BayernCloud-Daten), real per iframe in diese Beispielseite eingebunden
       </div>
 
-      <!-- WIDGET -->
+      <!-- WIDGET: echte iframe-Einbettung der Live-Karte -->
       <div class="widget">
-        <div class="w-bar">
-          <div class="b"><svg class="ic" viewBox="0 0 24 24"><path d="M3 20l6-16 6 7 3-3 3 12z"/></svg></div>
-          <div class="t">Freizeitkarte</div>
-          <div class="w-chips">
-            <span class="w-chip" style="background:var(--c-natur)"><span class="d" style="background:#fff"></span>Natur</span>
-            <span class="w-chip" style="background:var(--c-wasser)"><span class="d" style="background:#fff"></span>Wasser</span>
-            <span class="w-chip" style="background:var(--gold);color:#3c2a06">★ Geheimtipps</span>
-          </div>
-          <div class="lang">DE · CZ · EN</div>
-        </div>
-        <div class="w-map">
-          <svg class="bg" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-            <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F1E6"/><stop offset="1" stop-color="#EAF0E2"/></linearGradient></defs>
-            <rect width="900" height="600" fill="url(#sky)"/>
-            <path d="M-40 400 C120 350 220 450 360 410 C500 374 580 460 760 420 C840 402 900 440 960 425 L960 640 L-40 640Z" fill="#DDE7CF"/>
-            <path d="M-40 480 C160 440 300 520 480 485 C660 450 780 520 960 490 L960 640 L-40 640Z" fill="#CFDEC0"/>
-            <ellipse cx="230" cy="250" rx="62" ry="38" fill="#BFD9DE"/>
-            <path d="M-20 300 C160 275 250 360 430 320 C610 280 720 360 940 335" fill="none" stroke="#B4D2D9" stroke-width="12" stroke-linecap="round"/>
-            <path d="M470 -20 C500 150 440 320 520 470 C560 540 520 620 560 660" fill="none" stroke="#B9A98A" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round" opacity=".8"/>
-          </svg>
-          <div class="maplabel" style="left:90px;top:40px">Bayern · DE</div>
-          <div class="maplabel" style="right:120px;top:44px">Čechy · CZ</div>
-          <div class="pin secret" style="left:40%;top:56%;--pc:var(--gold)"><span class="star">★</span><div class="head"></div></div>
-          <div class="pin" style="left:28%;top:36%;--pc:var(--c-aussicht)"><div class="head"></div></div>
-          <div class="pin secret" style="left:56%;top:32%;--pc:var(--gold)"><span class="star">★</span><div class="head"></div></div>
-          <div class="pin" style="left:70%;top:50%;--pc:var(--c-natur)"><div class="head"></div></div>
-          <div class="pin secret" style="left:64%;top:66%;--pc:var(--gold)"><span class="star">★</span><div class="head"></div></div>
-          <div class="pin" style="left:80%;top:38%;--pc:var(--c-aussicht)"><div class="head"></div></div>
-
-          <div class="w-card">
-            <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=400&q=70" alt="">
-            <div class="p">
-              <div class="bd"><span class="badge" style="background:var(--c-wasser)">Wasser</span><span class="badge gold">★ Geheimtipp</span></div>
-              <h4 class="serif">Rißlochfälle</h4>
-              <p>Versteckte Wasserfälle in einer wildromantischen Schlucht.</p>
-            </div>
-          </div>
-          <div class="w-foot">Grenzraum entdecken · OpenStreetMap</div>
-        </div>
+        <iframe src="karte-live.html"
+          title="Grenzraum entdecken — interaktive Freizeitkarte (Live-Demo mit echten BayernCloud-Daten)"
+          style="display:block;width:100%;height:560px;border:0"></iframe>
       </div>
 
-      <div class="snippet-lbl"><svg class="ic" viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3"/></svg>Einbindung mit einer Zeile:</div>
+      <div class="snippet-lbl"><svg class="ic" viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3"/></svg>Einbindung mit einer Zeile — oben genau so umgesetzt:</div>
       <div class="snippet">&lt;<span class="a">iframe</span> <span class="c">src</span>=<span style="color:#bcd7c4">"https://karte.grenzraum-entdecken.de/embed?lang=de"</span> <span class="c">width</span>=<span style="color:#bcd7c4">"100%"</span> <span class="c">height</span>=<span style="color:#bcd7c4">"560"</span> <span class="c">style</span>=<span style="color:#bcd7c4">"border:0;border-radius:16px"</span>&gt;&lt;/<span class="a">iframe</span>&gt;</div>
     </div>
   </div>

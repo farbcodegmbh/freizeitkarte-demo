@@ -135,11 +135,11 @@
       </div>
     </div>
     <div class="grow"></div>
-    <div class="live"><span class="pulse"></span>Live-Daten · BayernCloud</div>
+    <div class="live"><span class="pulse"></span>Echtdaten · BayernCloud · Abruf 29.06.2026</div>
     <div class="lang">
       <button class="on">DE</button><span>·</span><button>CZ</button><span>·</span><button>EN</button>
     </div>
-    <button class="cta">
+    <button class="cta" id="cta-pass" title="Öffnet die Stempelpass-Demo (Gestaltungs-Mockup)" aria-label="Stempelpass-Demo öffnen">
       <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg>
       Stempelpass
     </button>
@@ -153,12 +153,12 @@
         <h2 class="serif">Nationalpark Bayerischer Wald</h2>
         <div class="sub">
           <svg class="ic" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span id="count">…</span> Ausflugsziele · live aus der BayernCloud
+          <span id="count">…</span> Ausflugsziele · echte BayernCloud-Daten
         </div>
       </div>
       <div class="src">
         <svg class="ic" viewBox="0 0 24 24" style="width:13px;height:13px;color:var(--pine)"><path d="M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2"/><path d="M9 21h6"/><path d="M12 7v14"/></svg>
-        Quelle: <code>data.bayerncloud.digital/api/v4</code>
+        Quelle: <code>data.bayerncloud.digital/api/v4</code>&nbsp;· abgerufen 29.06.2026 (HTTP&nbsp;200)
       </div>
       <div class="scroll" id="list"></div>
     </aside>
@@ -194,11 +194,11 @@
           </div>
           <div class="lic" id="d-lic"></div>
           <div class="actions">
-            <button class="btn primary">
+            <button class="btn primary" id="d-stamp" title="Öffnet die Stempelpass-Demo (Gestaltungs-Mockup)" aria-label="Stempelpass-Demo öffnen">
               <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg>
               Stempel sammeln
             </button>
-            <button class="btn ghost">
+            <button class="btn ghost" id="d-route" title="Route zu diesem Ziel auf OpenStreetMap planen" aria-label="Route auf OpenStreetMap planen">
               <svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a4 4 0 000-8H9a4 4 0 010-8h7"/></svg>
               Route
             </button>
@@ -208,7 +208,7 @@
     </section>
   </main>
 </div>
-<div class="mockup-tag">Prototyp · Live-Daten BayernCloud</div>
+<div class="mockup-tag">Prototyp · Echtdaten BayernCloud (Abruf 29.06.2026)</div>
 
 <script>
 const CATCOLORS = { 'Natur':'var(--c-natur)', 'Aussicht':'var(--c-aussicht)' };
@@ -243,8 +243,10 @@ const detail = document.getElementById('detail');
 const listEl = document.getElementById('list');
 let markers = [];
 let activeId = null;
+let current = null;
 
 function setDetail(p){
+  current = p;
   const cat = catFor(p);
   document.getElementById('d-img').src = p.image || p.thumb || '';
   document.getElementById('d-name').textContent = p.name;
@@ -270,6 +272,14 @@ document.getElementById('d-close').onclick = () => {
   detail.classList.remove('show'); activeId = null;
   markers.forEach(m => m.el.classList.remove('active'));
   document.querySelectorAll('.poi').forEach(el => el.classList.remove('active'));
+};
+
+// Aktionen: Stempelpass-Demo öffnen bzw. Route zum gewählten Ziel planen
+document.getElementById('cta-pass').onclick = () => window.open('stempelpass.html', '_blank');
+document.getElementById('d-stamp').onclick = () => window.open('stempelpass.html', '_blank');
+document.getElementById('d-route').onclick = () => {
+  if (!current) return;
+  window.open('https://www.openstreetmap.org/directions?from=&to=' + current.lat + '%2C' + current.lon, '_blank');
 };
 
 fetch('./data/pois.json').then(r => r.json()).then(data => {
