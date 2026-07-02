@@ -7,15 +7,18 @@
 <title>Grenzraum entdecken — Live-Karte mit echten BayernCloud-Daten</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="preconnect" href="https://data.bayerncloud.digital">
+<link rel="preconnect" href="https://a.basemaps.cartocdn.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
-<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" defer></script>
 <style>
   :root{
     --bg:#FAF6EE; --surface:#FFFFFF; --ink:#21302A; --muted:#74807A; --faint:#9AA49E;
     --line:#EAE3D6; --line-soft:#F1ECE2;
     --pine:#1D5A43; --pine-d:#16493B; --sand:#F3ECDD; --gold:#C68A2E; --gold-soft:#F2E2C2;
-    --c-natur:#3E7C4E; --c-aussicht:#2E6E8E;
+    --c-natur:#3E7C4E; --c-aussicht:#2E6E8E; --c-kultur:#7C5AA6; --c-wasser:#2C8B9C;
     --shadow:0 18px 40px -18px rgba(30,50,40,.28);
     --shadow-sm:0 6px 18px -10px rgba(30,50,40,.22);
   }
@@ -24,6 +27,7 @@
   body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
   .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
   .app{display:flex;flex-direction:column;height:100vh}
+  :focus-visible{outline:2.5px solid var(--pine);outline-offset:2px;border-radius:8px}
 
   /* Header */
   header{display:flex;align-items:center;gap:18px;padding:14px 26px;background:rgba(255,255,255,.86);
@@ -35,9 +39,10 @@
   .brand p{font-size:11.5px;color:var(--muted);letter-spacing:.02em}
   .grow{flex:1}
   .live{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--pine);
-    background:#EAF3EC;border:1px solid #CFE6D4;padding:7px 13px;border-radius:999px}
+    background:#EAF3EC;border:1px solid #CFE6D4;padding:7px 13px;border-radius:999px;white-space:nowrap}
   .live .pulse{width:8px;height:8px;border-radius:50%;background:#2faa5e;box-shadow:0 0 0 0 rgba(47,170,94,.5);
-    animation:pulse 2s infinite}
+    animation:pulse 2s infinite;flex:0 0 auto}
+  .live .short{display:none}
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,170,94,.5)}70%{box-shadow:0 0 0 7px rgba(47,170,94,0)}100%{box-shadow:0 0 0 0 rgba(47,170,94,0)}}
   .lang{display:flex;align-items:center;gap:2px;font-size:12.5px;color:var(--faint);font-weight:500}
   .lang button{font:inherit;color:var(--faint);background:none;border:0;padding:5px 9px;border-radius:8px;cursor:pointer}
@@ -52,15 +57,35 @@
   /* Left list */
   .list{flex:0 0 396px;background:var(--surface);border-right:1px solid var(--line);
     display:flex;flex-direction:column;min-height:0}
+  .grab{display:none}
   .list-head{padding:22px 24px 12px}
   .eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--pine)}
   .list-head h2{font-size:26px;font-weight:500;letter-spacing:-.02em;margin-top:6px;line-height:1.08}
   .list-head .sub{font-size:13px;color:var(--muted);margin-top:8px;display:flex;align-items:center;gap:6px}
-  .src{margin:12px 24px 4px;font-size:11px;color:var(--faint);display:flex;align-items:center;gap:6px;
-    border-top:1px solid var(--line-soft);padding-top:12px}
+
+  /* Filter chips + demo toggle */
+  .chips{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:12px 24px 8px}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--ink);
+    background:var(--surface);border:1px solid var(--line);padding:6px 12px 6px 10px;border-radius:999px;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+  .chip .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .chip.off{color:var(--faint);background:#fff}
+  .chip.off .dot{opacity:.35}
+  .chip.secret{border-color:var(--gold-soft);background:#FCF7EC;color:#7a5512}
+  .chip.secret.off{background:#fff;color:var(--faint);border-color:var(--line)}
+  .demo-row{display:flex;align-items:center;padding:6px 24px 12px;border-bottom:1px solid var(--line-soft)}
+  .switch{display:inline-flex;align-items:center;gap:9px;font:inherit;font-size:12px;font-weight:500;color:var(--muted);
+    background:none;border:0;cursor:pointer;padding:4px 0;text-align:left}
+  .switch .track{flex:0 0 34px;width:34px;height:20px;border-radius:999px;background:#E3DCCC;position:relative;transition:.18s}
+  .switch .track::after{content:'';position:absolute;top:2.5px;left:2.5px;width:15px;height:15px;border-radius:50%;background:#fff;
+    box-shadow:0 1px 3px rgba(30,50,40,.3);transition:.18s}
+  .switch[aria-checked="true"] .track{background:var(--pine)}
+  .switch[aria-checked="true"] .track::after{left:16.5px}
+  .switch[aria-checked="true"]{color:var(--ink)}
+
+  .src{margin:12px 24px 4px;font-size:11px;color:var(--faint);display:flex;align-items:center;gap:6px;padding-top:0}
   .src code{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:#5d6a63}
 
-  .scroll{overflow-y:auto;padding:10px 16px 24px;display:flex;flex-direction:column;gap:8px}
+  .scroll{overflow-y:auto;padding:10px 16px 10px;display:flex;flex-direction:column;gap:8px;flex:1}
   .scroll::-webkit-scrollbar{width:8px}
   .scroll::-webkit-scrollbar-thumb{background:#e6dfd2;border-radius:8px}
   .poi{display:flex;gap:13px;padding:9px;border-radius:16px;cursor:pointer;border:1px solid transparent;transition:.16s}
@@ -72,6 +97,9 @@
   .poi .cat .dot{width:7px;height:7px;border-radius:50%}
   .poi h3{font-size:16px;font-weight:500;letter-spacing:-.01em;line-height:1.15}
   .poi p{font-size:12.5px;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .tip{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;margin-top:2px;
+    font-size:10.5px;font-weight:600;color:#7a5512;background:#FBF1DA;padding:2px 8px;border-radius:999px}
+  .footnote{padding:10px 24px 18px;font-size:10.5px;color:var(--faint);line-height:1.5;border-top:1px solid var(--line-soft)}
 
   /* Map */
   .map{flex:1;position:relative;overflow:hidden}
@@ -81,8 +109,21 @@
   .marker .head{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
     background:var(--pc,#3E7C4E);border:2.5px solid #fff;display:grid;place-items:center;transition:.15s}
   .marker .head::after{content:'';width:9px;height:9px;border-radius:50%;background:#fff;transform:rotate(45deg)}
+  .marker .star{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--gold);text-shadow:0 1px 2px #fff}
   .marker.active .head{width:34px;height:34px}
   .marker.active{filter:drop-shadow(0 12px 14px rgba(20,40,30,.34));z-index:5}
+
+  /* Map tool buttons (print / export) */
+  .map-tools{position:absolute;top:16px;right:16px;display:flex;gap:8px;z-index:8}
+  .tool{width:40px;height:40px;border-radius:12px;border:1px solid var(--line-soft);background:rgba(255,255,255,.94);
+    color:var(--ink);cursor:pointer;display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+  .tool:hover{background:var(--sand)}
+
+  /* Demo dataset flag on map */
+  .demo-flag{position:absolute;top:16px;left:16px;z-index:8;display:none;align-items:center;gap:7px;
+    font-size:11.5px;font-weight:600;color:#7a5512;background:#FCF3DD;border:1px solid var(--gold-soft);
+    padding:7px 13px;border-radius:999px;box-shadow:var(--shadow-sm);max-width:calc(100% - 130px)}
+  .demo-flag.show{display:inline-flex}
 
   /* Detail card on map */
   .detail{position:absolute;left:24px;bottom:24px;width:340px;background:#fff;border-radius:22px;overflow:hidden;
@@ -91,14 +132,22 @@
   .detail .hero{position:relative;height:176px;background:#eef1ec}
   .detail .hero img{width:100%;height:100%;object-fit:cover}
   .detail .hero .grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,35,28,.6),transparent 55%)}
+  .detail.no-photo .hero{display:none}
   .detail .tags{position:absolute;left:14px;bottom:12px;display:flex;gap:7px}
   .badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#fff;
     padding:4px 10px;border-radius:999px}
   .badge.live{background:rgba(255,255,255,.92);color:var(--pine)}
   .badge.live .pulse{width:7px;height:7px;border-radius:50%;background:#2faa5e}
+  .badge.gold{background:var(--gold);color:#3c2a06}
   .detail .close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;border:0;
-    background:rgba(255,255,255,.9);color:var(--ink);cursor:pointer;display:grid;place-items:center}
+    background:rgba(255,255,255,.9);color:var(--ink);cursor:pointer;display:grid;place-items:center;z-index:2}
+  .detail.no-photo .close{background:var(--sand)}
   .detail .pad{padding:16px 18px 18px}
+  .detail .pad-top{display:flex;align-items:flex-start;gap:10px}
+  .detail .pad-top h3{flex:1}
+  .demo-hint{display:none;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#7a5512;
+    background:#FCF3DD;border:1px solid var(--gold-soft);padding:5px 10px;border-radius:999px;margin-bottom:10px;align-self:flex-start}
+  .detail.no-photo .demo-hint{display:inline-flex}
   .detail h3{font-size:21px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
   .detail .loc{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted);margin-top:5px}
   .detail .desc{font-size:13.5px;color:#4c5852;line-height:1.5;margin-top:11px;
@@ -119,6 +168,55 @@
   .mockup-tag{position:fixed;bottom:10px;right:14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);z-index:50;
     background:rgba(255,255,255,.7);padding:3px 8px;border-radius:6px}
   .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:14px;z-index:6}
+
+  /* ---------- Print ---------- */
+  #print-area{display:none}
+  @media print{
+    .app,.mockup-tag{display:none!important}
+    body{background:#fff;height:auto}
+    html,body{height:auto}
+    #print-area{display:block;padding:10mm 4mm}
+    #print-area h1{font-size:24pt;font-weight:500;letter-spacing:-.02em}
+    #print-area .pd{font-size:10pt;color:#555;margin:6px 0 14px}
+    #print-area img{width:100%;border:1pt solid #ccc;border-radius:6px}
+    #print-area .pfoot{font-size:8pt;color:#888;margin-top:8px}
+  }
+
+  /* ---------- Mobile (Bottom-Sheet-Layout) ---------- */
+  @media (max-width:768px){
+    .app{height:100dvh}
+    header{flex-wrap:wrap;gap:8px 10px;padding:10px 14px}
+    .brand h1{font-size:16px}
+    .brand p{font-size:10.5px}
+    .live{order:5;font-size:11px;padding:5px 10px}
+    .live .full{display:none}
+    .live .short{display:inline}
+    .lang{order:6;margin-left:auto}
+    .cta{padding:10px;border-radius:12px}
+    .cta .cta-label{display:none}
+
+    main{flex-direction:column}
+    .map{order:1;flex:0 0 52vh;min-height:0}
+    .list{order:2;flex:1;min-height:0;border-right:0;border-top:1px solid var(--line);
+      border-radius:18px 18px 0 0;margin-top:-16px;z-index:12;box-shadow:0 -10px 24px -18px rgba(30,50,40,.35)}
+    .grab{display:block;flex:0 0 auto;padding:9px 0 1px}
+    .grab::after{content:'';display:block;width:44px;height:5px;border-radius:999px;background:#DDD5C4;margin:0 auto}
+    .list-head{padding:10px 18px 8px}
+    .list-head h2{font-size:21px}
+    .chips{flex-wrap:nowrap;overflow-x:auto;padding:10px 18px 8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .chips::-webkit-scrollbar{display:none}
+    .demo-row{padding:4px 18px 10px}
+    .src{margin:10px 18px 2px}
+    .scroll{padding:8px 12px 10px}
+    .footnote{padding:8px 18px 14px}
+
+    .map-tools{top:12px;right:12px}
+    .demo-flag{top:12px;left:12px;font-size:10.5px;max-width:calc(100% - 120px)}
+
+    .detail{position:fixed;left:0;right:0;bottom:0;width:auto;border-radius:22px 22px 0 0;
+      max-height:45vh;overflow-y:auto;z-index:40;border-bottom:0}
+    .detail .hero{height:132px}
+  }
 </style>
 </head>
 <body>
@@ -127,40 +225,51 @@
   <header>
     <div class="brand">
       <div class="logo">
-        <svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M3 20l6-16 6 7 3-3 3 12z"/><path d="M9 4l3 8"/></svg>
+        <svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px" aria-hidden="true"><path d="M3 20l6-16 6 7 3-3 3 12z"/><path d="M9 4l3 8"/></svg>
       </div>
       <div>
         <h1 class="serif">Grenzraum entdecken</h1>
-        <p>Landkreis Regen · Bezirk Klattau</p>
+        <p id="subtitle">Landkreis Regen · Bezirk Klattau</p>
       </div>
     </div>
     <div class="grow"></div>
-    <div class="live"><span class="pulse"></span>Echtdaten · BayernCloud · Abruf 29.06.2026</div>
-    <div class="lang">
-      <button class="on">DE</button><span>·</span><button>CZ</button><span>·</span><button>EN</button>
+    <div class="live"><span class="pulse" aria-hidden="true"></span><span class="full" id="live-full">Echtdaten · BayernCloud · Abruf 29.06.2026</span><span class="short" id="live-short">Echtdaten · 29.06.2026</span></div>
+    <div class="lang" role="group" aria-label="Sprache wählen">
+      <button class="on" data-lang="de" aria-pressed="true" aria-label="Deutsch">DE</button><span aria-hidden="true">·</span><button data-lang="cs" aria-pressed="false" aria-label="Čeština">CZ</button><span aria-hidden="true">·</span><button data-lang="en" aria-pressed="false" aria-label="English">EN</button>
     </div>
     <button class="cta" id="cta-pass" title="Öffnet die Stempelpass-Demo (Gestaltungs-Mockup)" aria-label="Stempelpass-Demo öffnen">
-      <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg>
-      Stempelpass
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg>
+      <span class="cta-label" id="cta-label">Stempelpass</span>
     </button>
   </header>
 
   <main>
     <!-- Left list -->
     <aside class="list">
+      <div class="grab" aria-hidden="true"></div>
       <div class="list-head">
-        <div class="eyebrow">Freizeitkarte · Echtdaten-Prototyp</div>
-        <h2 class="serif">Nationalpark Bayerischer Wald</h2>
+        <div class="eyebrow" id="eyebrow">Freizeitkarte · Echtdaten-Prototyp</div>
+        <h2 class="serif" id="list-title">Nationalpark Bayerischer Wald</h2>
         <div class="sub">
-          <svg class="ic" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span id="count">…</span> Ausflugsziele · echte BayernCloud-Daten
+          <svg class="ic" viewBox="0 0 24 24" style="width:14px;height:14px" aria-hidden="true"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span><span id="count">…</span> <span id="count-label">Ausflugsziele · echte BayernCloud-Daten</span></span>
         </div>
       </div>
-      <div class="src">
-        <svg class="ic" viewBox="0 0 24 24" style="width:13px;height:13px;color:var(--pine)"><path d="M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2"/><path d="M9 21h6"/><path d="M12 7v14"/></svg>
-        Quelle: <code>data.bayerncloud.digital/api/v4</code>&nbsp;· abgerufen 29.06.2026 (HTTP&nbsp;200)
+
+      <div class="chips" id="chips" role="group" aria-label="Kategorien filtern"></div>
+      <div class="demo-row">
+        <button class="switch" id="demo-toggle" role="switch" aria-checked="false">
+          <span class="track" aria-hidden="true"></span>
+          <span id="demo-label">Demo-Datensatz (+40 Beispielziele)</span>
+        </button>
       </div>
-      <div class="scroll" id="list"></div>
+
+      <div class="src">
+        <svg class="ic" viewBox="0 0 24 24" style="width:13px;height:13px;color:var(--pine)" aria-hidden="true"><path d="M4 7V5a2 2 0 012-2h12a2 2 0 012 2v2"/><path d="M9 21h6"/><path d="M12 7v14"/></svg>
+        <span><span id="src-label">Quelle:</span> <code>data.bayerncloud.digital/api/v4</code> <span id="src-suffix">· abgerufen 29.06.2026 (HTTP&nbsp;200)</span></span>
+      </div>
+      <div class="scroll" id="list" role="list"></div>
+      <div class="footnote" id="footnote">Zielinhalte im Beispiel auf Deutsch — Übersetzungen der Inhalte liefert lt. Vergabestelle der Auftraggeber.</div>
     </aside>
 
     <!-- Map -->
@@ -168,39 +277,56 @@
       <div id="map"></div>
       <div class="loading" id="loading">Lade Ausflugsziele aus der BayernCloud …</div>
 
+      <div class="map-tools">
+        <button class="tool" id="btn-print" title="Karte drucken" aria-label="Karte drucken">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>
+        </button>
+        <button class="tool" id="btn-export" title="Kartenausschnitt als Bild (PNG) speichern" aria-label="Kartenausschnitt als PNG exportieren">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+        </button>
+      </div>
+
+      <div class="demo-flag" id="demo-flag" role="status">
+        <svg class="ic" viewBox="0 0 24 24" style="width:13px;height:13px" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg>
+        <span id="demo-flag-label">Beispieldatensatz — Demonstration Clustering/Last</span>
+      </div>
+
       <!-- selected detail -->
-      <div class="detail" id="detail">
+      <div class="detail" id="detail" role="dialog" aria-label="Details zum Ausflugsziel">
         <div class="hero">
           <img id="d-img" src="" alt="">
           <div class="grad"></div>
-          <button class="close" id="d-close">
-            <svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          </button>
           <div class="tags">
-            <span class="badge live"><span class="pulse"></span>BayernCloud</span>
+            <span class="badge live"><span class="pulse" aria-hidden="true"></span>BayernCloud</span>
             <span class="badge" id="d-cat" style="background:var(--c-natur)">Natur</span>
+            <span class="badge gold" id="d-tip" style="display:none">★ <span id="d-tip-label">Geheimtipp</span></span>
           </div>
         </div>
+        <button class="close" id="d-close" aria-label="Details schließen">
+          <svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
         <div class="pad">
+          <span class="demo-hint" id="demo-hint">Synthetisches Beispielziel (Cluster-Demo)</span>
           <h3 class="serif" id="d-name">—</h3>
           <div class="loc">
-            <svg class="ic" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <svg class="ic" viewBox="0 0 24 24" style="width:13px;height:13px" aria-hidden="true"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <span id="d-loc">—</span>
           </div>
           <p class="desc" id="d-desc">—</p>
           <div class="meta">
-            <span class="pill"><svg class="ic" viewBox="0 0 24 24" style="width:12px;height:12px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="d-lang">DE</span></span>
+            <span class="pill"><svg class="ic" viewBox="0 0 24 24" style="width:12px;height:12px" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="d-lang">DE</span></span>
             <span class="pill" id="d-geo">—</span>
+            <span class="pill" id="d-catpill" style="display:none">—</span>
           </div>
           <div class="lic" id="d-lic"></div>
           <div class="actions">
             <button class="btn primary" id="d-stamp" title="Öffnet die Stempelpass-Demo (Gestaltungs-Mockup)" aria-label="Stempelpass-Demo öffnen">
-              <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg>
-              Stempel sammeln
+              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg>
+              <span id="d-stamp-label">Stempel sammeln</span>
             </button>
             <button class="btn ghost" id="d-route" title="Route zu diesem Ziel auf OpenStreetMap planen" aria-label="Route auf OpenStreetMap planen">
-              <svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a4 4 0 000-8H9a4 4 0 010-8h7"/></svg>
-              Route
+              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a4 4 0 000-8H9a4 4 0 010-8h7"/></svg>
+              <span id="d-route-label">Route</span>
             </button>
           </div>
         </div>
@@ -210,53 +336,162 @@
 </div>
 <div class="mockup-tag">Prototyp · Echtdaten BayernCloud (Abruf 29.06.2026)</div>
 
+<!-- Nur für den Ausdruck sichtbar -->
+<div id="print-area" aria-hidden="true">
+  <h1 class="serif" id="print-title">Grenzraum entdecken — Kartenausschnitt</h1>
+  <div class="pd" id="print-date"></div>
+  <img id="print-img" src="" alt="Kartenausschnitt">
+  <div class="pfoot">© OpenStreetMap-Mitwirkende © CARTO · Prototyp farbcode GmbH · POI-Daten: BayernCloud Tourismus</div>
+</div>
+
 <script>
-const CATCOLORS = { 'Natur':'var(--c-natur)', 'Aussicht':'var(--c-aussicht)' };
-// leichte, illustrative Kategorisierung fürs Prototyp-UI (Gipfel/Aussichtsberg → Aussicht, sonst Natur)
-function catFor(p){ return /falkenstein|gipfel|aussicht|\barber\b/i.test(p.name) ? 'Aussicht' : 'Natur'; }
+'use strict';
+// App-Start erst nach DOMContentLoaded — MapLibre lädt deferred und ist dann garantiert verfügbar
+document.addEventListener('DOMContentLoaded', function initApp(){
+/* ---------- Kategorien & Übersetzungen ---------- */
+const CATS = ['Natur','Aussicht','Kultur','Wasser'];
+const CATCOLORS = { 'Natur':'var(--c-natur)', 'Aussicht':'var(--c-aussicht)', 'Kultur':'var(--c-kultur)', 'Wasser':'var(--c-wasser)' };
+const CATHEX = { 'Natur':'#3E7C4E', 'Aussicht':'#2E6E8E', 'Kultur':'#7C5AA6', 'Wasser':'#2C8B9C' };
 
-const map = new maplibregl.Map({
-  container: 'map',
-  style: {
-    version: 8,
-    sources: {
-      carto: {
-        type: 'raster',
-        tiles: [
-          'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
-          'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
-          'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png'
-        ],
-        tileSize: 256,
-        attribution: '© OpenStreetMap-Mitwirkende © CARTO'
-      }
-    },
-    layers: [{ id: 'carto', type: 'raster', source: 'carto' }]
+const I18N = {
+  de: {
+    subtitle:'Landkreis Regen · Bezirk Klattau',
+    liveFull:'Echtdaten · BayernCloud · Abruf 29.06.2026', liveShort:'Echtdaten · 29.06.2026',
+    ctaPass:'Stempelpass', ctaPassTitle:'Öffnet die Stempelpass-Demo (Gestaltungs-Mockup)',
+    eyebrow:'Freizeitkarte · Echtdaten-Prototyp', listTitle:'Nationalpark Bayerischer Wald',
+    countLabel:'Ausflugsziele · echte BayernCloud-Daten',
+    srcLabel:'Quelle:', srcSuffix:'· abgerufen 29.06.2026 (HTTP 200)',
+    loading:'Lade Ausflugsziele aus der BayernCloud …', loadError:'Fehler beim Laden der BayernCloud-Daten.',
+    chips:{ Natur:'Natur', Aussicht:'Aussicht', Kultur:'Kultur', Wasser:'Wasser' }, chipTips:'★ Geheimtipps',
+    demoToggle:'Demo-Datensatz (+40 Beispielziele)',
+    demoFlag:'Beispieldatensatz — Demonstration Clustering/Last',
+    demoHint:'Synthetisches Beispielziel (Cluster-Demo)',
+    stamp:'Stempel sammeln', route:'Route', tip:'Geheimtipp',
+    print:'Karte drucken', exportPng:'Kartenausschnitt als Bild (PNG) speichern',
+    printTitle:'Grenzraum entdecken — Kartenausschnitt', printedOn:'Gedruckt am',
+    footnote:'Zielinhalte im Beispiel auf Deutsch — Übersetzungen der Inhalte liefert lt. Vergabestelle der Auftraggeber.',
+    close:'Details schließen', langGroup:'Sprache wählen', chipsGroup:'Kategorien filtern',
+    fallbackLoc:'Bayerischer Wald', imgCredit:'Bild:'
   },
-  center: [13.40, 49.07],
-  zoom: 10.1,
-  attributionControl: { compact: true }
-});
-map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
+  cs: {
+    subtitle:'Okres Regen · Okres Klatovy',
+    liveFull:'Reálná data · BayernCloud · staženo 29. 6. 2026', liveShort:'Reálná data · 29. 6. 2026',
+    ctaPass:'Razítkový pas', ctaPassTitle:'Otevře demo razítkového pasu (grafický návrh)',
+    eyebrow:'Volnočasová mapa · Prototyp s reálnými daty', listTitle:'Národní park Bavorský les',
+    countLabel:'výletních cílů · reálná data z BayernCloud',
+    srcLabel:'Zdroj:', srcSuffix:'· staženo 29. 6. 2026 (HTTP 200)',
+    loading:'Načítám výletní cíle z BayernCloud …', loadError:'Chyba při načítání dat z BayernCloud.',
+    chips:{ Natur:'Příroda', Aussicht:'Vyhlídky', Kultur:'Kultura', Wasser:'Voda' }, chipTips:'★ Tajné tipy',
+    demoToggle:'Ukázková data (+40 vzorových cílů)',
+    demoFlag:'Ukázková data — demonstrace clusteringu a zátěže',
+    demoHint:'Syntetický vzorový cíl (demo clusteringu)',
+    stamp:'Získat razítko', route:'Trasa', tip:'Tajný tip',
+    print:'Vytisknout mapu', exportPng:'Uložit výřez mapy jako obrázek (PNG)',
+    printTitle:'Grenzraum entdecken — výřez mapy', printedOn:'Vytištěno dne',
+    footnote:'Obsah cílů je v ukázce v němčině — překlady obsahu dodá dle zadávací dokumentace zadavatel.',
+    close:'Zavřít detail', langGroup:'Výběr jazyka', chipsGroup:'Filtrovat kategorie',
+    fallbackLoc:'Bavorský les', imgCredit:'Foto:'
+  },
+  en: {
+    subtitle:'Regen District · Klatovy District',
+    liveFull:'Real data · BayernCloud · retrieved 29 Jun 2026', liveShort:'Real data · 29 Jun 2026',
+    ctaPass:'Stamp Pass', ctaPassTitle:'Opens the stamp-pass demo (design mockup)',
+    eyebrow:'Leisure Map · Real-Data Prototype', listTitle:'Bavarian Forest National Park',
+    countLabel:'destinations · real BayernCloud data',
+    srcLabel:'Source:', srcSuffix:'· retrieved 29 Jun 2026 (HTTP 200)',
+    loading:'Loading destinations from BayernCloud …', loadError:'Error loading BayernCloud data.',
+    chips:{ Natur:'Nature', Aussicht:'Views', Kultur:'Culture', Wasser:'Water' }, chipTips:'★ Hidden gems',
+    demoToggle:'Demo dataset (+40 sample destinations)',
+    demoFlag:'Sample dataset — clustering/load demonstration',
+    demoHint:'Synthetic sample destination (cluster demo)',
+    stamp:'Collect stamp', route:'Route', tip:'Hidden gem',
+    print:'Print map', exportPng:'Save map view as image (PNG)',
+    printTitle:'Grenzraum entdecken — Map view', printedOn:'Printed on',
+    footnote:'Destination content shown in German in this sample — content translations will be supplied by the contracting authority.',
+    close:'Close details', langGroup:'Choose language', chipsGroup:'Filter categories',
+    fallbackLoc:'Bavarian Forest', imgCredit:'Photo:'
+  }
+};
 
-const detail = document.getElementById('detail');
-const listEl = document.getElementById('list');
+/* ---------- State ---------- */
+let lang = 'de';
+let pois = [];              // echte BayernCloud-POIs
+let demoPois = null;        // synthetischer Datensatz (lazy geladen)
+let demoMode = false;
+let activeCats = new Set(CATS);
+let onlyTips = false;
 let markers = [];
 let activeId = null;
 let current = null;
 
+const T = () => I18N[lang];
+const isMobile = () => window.matchMedia('(max-width:768px)').matches;
+const visible = p => activeCats.has(p.category) && (!onlyTips || p.geheimtipp);
+
+/* ---------- Karte (defensiv: UI bleibt auch ohne WebGL nutzbar) ---------- */
+let mapgl = null;
+try {
+  mapgl = new maplibregl.Map({
+    container: 'map',
+    style: {
+      version: 8,
+      glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+      sources: {
+        carto: {
+          type: 'raster',
+          tiles: [
+            'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+            'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+            'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png'
+          ],
+          tileSize: 256,
+          attribution: '© OpenStreetMap-Mitwirkende © CARTO'
+        }
+      },
+      layers: [{ id: 'carto', type: 'raster', source: 'carto' }]
+    },
+    center: [13.40, 49.07],
+    zoom: 10.1,
+    preserveDrawingBuffer: true,   // nötig für PNG-Export/Druck des Canvas
+    attributionControl: { compact: true }
+  });
+  mapgl.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
+} catch (e) {
+  console.error('Karte konnte nicht initialisiert werden (WebGL nicht verfügbar?)', e);
+}
+window._grMap = mapgl; // Debug-Handle (Prototyp)
+
+const detail = document.getElementById('detail');
+const listEl = document.getElementById('list');
+const $ = id => document.getElementById(id);
+
+/* ---------- Detailkarte ---------- */
 function setDetail(p){
   current = p;
-  const cat = catFor(p);
-  document.getElementById('d-img').src = p.image || p.thumb || '';
-  document.getElementById('d-name').textContent = p.name;
-  document.getElementById('d-loc').textContent = [p.postalCode, p.locality].filter(Boolean).join(' ') || 'Bayerischer Wald';
-  document.getElementById('d-desc').textContent = p.description || '';
-  document.getElementById('d-lang').textContent = (p.languages||['de']).map(s=>String(s).toUpperCase()).join(' · ');
-  document.getElementById('d-geo').textContent = '◎ ' + Number(p.lat).toFixed(4) + ', ' + Number(p.lon).toFixed(4);
-  const dcat = document.getElementById('d-cat');
-  dcat.textContent = cat; dcat.style.background = CATCOLORS[cat];
-  document.getElementById('d-lic').textContent = p.copyright ? ('Bild: ' + p.copyright) : '';
+  const isDemo = !!p.demo;
+  detail.classList.toggle('no-photo', isDemo);
+  if (!isDemo){
+    $('d-img').src = p.thumb || p.image || ''; /* Thumb reicht für die 340px-Karte und lädt deutlich schneller */
+    $('d-img').alt = p.name;
+  } else {
+    $('d-img').src = ''; $('d-img').alt = '';
+  }
+  $('d-name').textContent = p.name;
+  $('d-loc').textContent = [p.postalCode, p.locality].filter(Boolean).join(' ') || T().fallbackLoc;
+  $('d-desc').textContent = p.description || '';
+  $('d-lang').textContent = (p.languages||['de']).map(s=>String(s).toUpperCase()).join(' · ');
+  $('d-geo').textContent = '◎ ' + Number(p.lat).toFixed(4) + ', ' + Number(p.lon).toFixed(4);
+  const dcat = $('d-cat');
+  dcat.textContent = T().chips[p.category] || p.category;
+  dcat.style.background = CATCOLORS[p.category] || 'var(--c-natur)';
+  $('d-tip').style.display = p.geheimtipp ? '' : 'none';
+  $('d-tip-label').textContent = T().tip;
+  const catpill = $('d-catpill');
+  if (isDemo){
+    catpill.style.display = '';
+    catpill.textContent = (T().chips[p.category] || p.category) + (p.geheimtipp ? ' · ★' : '');
+  } else catpill.style.display = 'none';
+  $('d-lic').textContent = p.copyright ? (T().imgCredit + ' ' + p.copyright) : '';
   detail.classList.add('show');
 }
 
@@ -265,71 +500,314 @@ function selectPOI(p, fly = true){
   setDetail(p);
   markers.forEach(m => m.el.classList.toggle('active', m.id === p.id));
   document.querySelectorAll('.poi').forEach(el => el.classList.toggle('active', el.dataset.id === p.id));
-  if (fly) map.flyTo({ center: [p.lon, p.lat], zoom: 12.4, duration: 700, offset: [120, -40] });
+  if (fly && mapgl) mapgl.flyTo({ center: [p.lon, p.lat], zoom: 12.4, duration: 700,
+    offset: isMobile() ? [0, -40] : [120, -40] });
 }
 
-document.getElementById('d-close').onclick = () => {
-  detail.classList.remove('show'); activeId = null;
+$('d-close').onclick = () => {
+  detail.classList.remove('show'); activeId = null; current = null;
   markers.forEach(m => m.el.classList.remove('active'));
   document.querySelectorAll('.poi').forEach(el => el.classList.remove('active'));
 };
 
-// Aktionen: Stempelpass-Demo öffnen bzw. Route zum gewählten Ziel planen
-document.getElementById('cta-pass').onclick = () => window.open('stempelpass.html', '_blank');
-document.getElementById('d-stamp').onclick = () => window.open('stempelpass.html', '_blank');
-document.getElementById('d-route').onclick = () => {
+/* Aktionen: Stempelpass-Demo öffnen bzw. Route zum gewählten Ziel planen */
+$('cta-pass').onclick = () => window.open('stempelpass.html', '_blank');
+$('d-stamp').onclick = () => window.open('stempelpass.html', '_blank');
+$('d-route').onclick = () => {
   if (!current) return;
   window.open('https://www.openstreetmap.org/directions?from=&to=' + current.lat + '%2C' + current.lon, '_blank');
 };
 
-fetch('./data/pois.json').then(r => r.json()).then(data => {
-  const pois = data.pois.filter(p => p.lat && p.lon);
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('count').textContent = pois.length;
-
-  // List
+/* ---------- Liste ---------- */
+function renderList(){
   listEl.innerHTML = '';
   pois.forEach(p => {
-    const cat = catFor(p);
     const card = document.createElement('div');
     card.className = 'poi'; card.dataset.id = p.id;
+    card.setAttribute('role','listitem');
+    card.tabIndex = 0;
+    card.setAttribute('aria-label', p.name);
+    const catLabel = T().chips[p.category] || p.category;
     card.innerHTML = `
-      <img class="thumb" src="${p.thumb || p.image || ''}" alt="">
+      <img class="thumb" src="${p.thumb || p.image || ''}" alt="${p.name}">
       <div class="body">
-        <div class="cat" style="color:${CATCOLORS[cat]}"><span class="dot" style="background:${CATCOLORS[cat]}"></span>${cat}</div>
+        <div class="cat" style="color:${CATCOLORS[p.category]}"><span class="dot" style="background:${CATCOLORS[p.category]}"></span>${catLabel}</div>
         <h3 class="serif">${p.name}</h3>
         <p>${p.description || ''}</p>
+        ${p.geheimtipp ? `<span class="tip">★ ${T().tip}</span>` : ''}
       </div>`;
-    card.onclick = () => selectPOI(p);
+    const go = () => selectPOI(p);
+    card.onclick = go;
+    card.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } };
+    if (p.id === activeId) card.classList.add('active');
     listEl.appendChild(card);
   });
+  applyFilters();
+}
 
-  // Markers
+/* ---------- Filter-Chips ---------- */
+function renderChips(){
+  const box = $('chips');
+  box.innerHTML = '';
+  box.setAttribute('aria-label', T().chipsGroup);
+  CATS.forEach(cat => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (activeCats.has(cat) ? '' : ' off');
+    b.setAttribute('aria-pressed', activeCats.has(cat) ? 'true' : 'false');
+    b.innerHTML = `<span class="dot" style="background:${CATCOLORS[cat]}" aria-hidden="true"></span>${T().chips[cat]}`;
+    b.onclick = () => {
+      if (activeCats.has(cat)) activeCats.delete(cat); else activeCats.add(cat);
+      b.classList.toggle('off', !activeCats.has(cat));
+      b.setAttribute('aria-pressed', activeCats.has(cat) ? 'true' : 'false');
+      applyFilters();
+    };
+    box.appendChild(b);
+  });
+  const tips = document.createElement('button');
+  tips.className = 'chip secret' + (onlyTips ? '' : ' off');
+  tips.setAttribute('aria-pressed', onlyTips ? 'true' : 'false');
+  tips.textContent = T().chipTips;
+  tips.onclick = () => {
+    onlyTips = !onlyTips;
+    tips.classList.toggle('off', !onlyTips);
+    tips.setAttribute('aria-pressed', onlyTips ? 'true' : 'false');
+    applyFilters();
+  };
+  box.appendChild(tips);
+}
+
+function applyFilters(){
+  // DOM-Marker + Listeneinträge der echten POIs
+  markers.forEach(m => { m.el.style.display = visible(m.p) ? '' : 'none'; });
+  document.querySelectorAll('.poi').forEach(el => {
+    const p = pois.find(x => x.id === el.dataset.id);
+    el.style.display = (p && visible(p)) ? '' : 'none';
+  });
+  $('count').textContent = pois.filter(visible).length;
+  // GeoJSON-Quelle im Demo-Modus neu befüllen (Cluster spiegeln den Filter)
+  if (demoMode) updateDemoSource();
+}
+
+/* ---------- Demo-Datensatz / Clustering ---------- */
+const DEMO_LAYERS = ['demo-clusters','demo-cluster-count','demo-points'];
+
+function featureCollection(){
+  const feats = [];
+  const push = p => feats.push({
+    type:'Feature',
+    geometry:{ type:'Point', coordinates:[p.lon, p.lat] },
+    properties:{ id:p.id, name:p.name, category:p.category, geheimtipp:!!p.geheimtipp, demo:!!p.demo,
+      description:p.description || '', locality:p.locality || '', lat:p.lat, lon:p.lon }
+  });
+  pois.filter(visible).forEach(push);
+  (demoPois||[]).filter(visible).forEach(push);
+  return { type:'FeatureCollection', features:feats };
+}
+
+function updateDemoSource(){
+  if (!mapgl) return;
+  const src = mapgl.getSource('demo');
+  if (src) src.setData(featureCollection());
+}
+
+function addDemoLayers(){
+  if (!mapgl) return;
+  if (mapgl.getSource('demo')) { updateDemoSource(); setDemoLayerVisibility(true); return; }
+  mapgl.addSource('demo', { type:'geojson', data: featureCollection(), cluster:true, clusterMaxZoom:13, clusterRadius:52 });
+  mapgl.addLayer({ id:'demo-clusters', type:'circle', source:'demo', filter:['has','point_count'],
+    paint:{ 'circle-color':'#1D5A43', 'circle-opacity':.92,
+      'circle-stroke-color':'#ffffff', 'circle-stroke-width':2.5,
+      'circle-radius':['step',['get','point_count'],16,8,20,20,25] } });
+  mapgl.addLayer({ id:'demo-cluster-count', type:'symbol', source:'demo', filter:['has','point_count'],
+    layout:{ 'text-field':['get','point_count_abbreviated'], 'text-font':['Open Sans Semibold'], 'text-size':13, 'text-allow-overlap':true },
+    paint:{ 'text-color':'#ffffff' } });
+  mapgl.addLayer({ id:'demo-points', type:'circle', source:'demo', filter:['!',['has','point_count']],
+    paint:{
+      'circle-color':['match',['get','category'],'Natur',CATHEX.Natur,'Aussicht',CATHEX.Aussicht,'Kultur',CATHEX.Kultur,'Wasser',CATHEX.Wasser,CATHEX.Natur],
+      'circle-radius':7,
+      'circle-stroke-width':2.5,
+      'circle-stroke-color':['case',['==',['get','geheimtipp'],true],'#C68A2E','#ffffff']
+    } });
+
+  mapgl.on('click','demo-clusters', e => {
+    const f = mapgl.queryRenderedFeatures(e.point, { layers:['demo-clusters'] })[0];
+    if (!f) return;
+    const src = mapgl.getSource('demo');
+    Promise.resolve(src.getClusterExpansionZoom(f.properties.cluster_id))
+      .then(z => mapgl.easeTo({ center: f.geometry.coordinates, zoom: z + 0.3, duration: 500 }))
+      .catch(()=>{});
+  });
+  mapgl.on('click','demo-points', e => {
+    const f = e.features && e.features[0];
+    if (!f) return;
+    const props = f.properties;
+    if (props.demo === true || props.demo === 'true'){
+      setDetail({
+        id: props.id, name: props.name, category: props.category,
+        geheimtipp: props.geheimtipp === true || props.geheimtipp === 'true',
+        demo: true, description: props.description, locality: props.locality,
+        lat: Number(props.lat), lon: Number(props.lon), languages:['de']
+      });
+      markers.forEach(m => m.el.classList.remove('active'));
+      document.querySelectorAll('.poi').forEach(el => el.classList.remove('active'));
+      activeId = props.id;
+    } else {
+      const real = pois.find(x => x.id === props.id);
+      if (real) selectPOI(real);
+    }
+  });
+  ['demo-clusters','demo-points'].forEach(l => {
+    mapgl.on('mouseenter', l, () => mapgl.getCanvas().style.cursor = 'pointer');
+    mapgl.on('mouseleave', l, () => mapgl.getCanvas().style.cursor = '');
+  });
+}
+
+function setDemoLayerVisibility(on){
+  if (!mapgl) return;
+  DEMO_LAYERS.forEach(l => {
+    if (mapgl.getLayer(l)) mapgl.setLayoutProperty(l, 'visibility', on ? 'visible' : 'none');
+  });
+}
+
+const demoToggle = $('demo-toggle');
+demoToggle.onclick = () => {
+  demoMode = !demoMode;
+  demoToggle.setAttribute('aria-checked', demoMode ? 'true' : 'false');
+  $('demo-flag').classList.toggle('show', demoMode);
+  if (demoMode){
+    const ready = demoPois ? Promise.resolve() :
+      fetch('./data/demo-pois.json?v=2').then(r => r.json()).then(d => { demoPois = d.pois || []; });
+    ready.then(() => {
+      if (!mapgl) return;
+      // Robust gegen späten Style-Load: einfach erneut versuchen statt auf Events zu hoffen
+      let tries = 0;
+      const doAdd = () => {
+        if (!demoMode) return;
+        try { addDemoLayers(); setDemoLayerVisibility(true); updateDemoSource(); }
+        catch(e){ if (++tries < 40) setTimeout(doAdd, 500); }
+      };
+      doAdd();
+    }).catch(err => {
+      console.error('Demo-Datensatz konnte nicht geladen werden', err);
+      demoMode = false;
+      demoToggle.setAttribute('aria-checked','false');
+      $('demo-flag').classList.remove('show');
+    });
+  } else {
+    setDemoLayerVisibility(false);
+    if (current && current.demo) $('d-close').click();
+  }
+};
+
+/* ---------- Drucken & PNG-Export ---------- */
+function mapAsDataURL(){
+  if (!mapgl) return '';
+  try { return mapgl.getCanvas().toDataURL('image/png'); }
+  catch(e){ console.error(e); return ''; }
+}
+$('btn-print').onclick = () => {
+  const url = mapAsDataURL();
+  if (!url) return;
+  $('print-img').src = url;
+  $('print-title').textContent = T().printTitle;
+  const locale = lang === 'de' ? 'de-DE' : lang === 'cs' ? 'cs-CZ' : 'en-GB';
+  $('print-date').textContent = T().printedOn + ' ' + new Date().toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' });
+  setTimeout(() => window.print(), 60);
+};
+$('btn-export').onclick = () => {
+  const url = mapAsDataURL();
+  if (!url) return;
+  const a = document.createElement('a');
+  a.href = url; a.download = 'grenzraum-karte.png';
+  document.body.appendChild(a); a.click(); a.remove();
+};
+
+/* ---------- Sprachumschaltung ---------- */
+function applyLang(){
+  const t = T();
+  document.documentElement.lang = lang;
+  $('subtitle').textContent = t.subtitle;
+  $('live-full').textContent = t.liveFull;
+  $('live-short').textContent = t.liveShort;
+  $('cta-label').textContent = t.ctaPass;
+  $('cta-pass').title = t.ctaPassTitle;
+  $('cta-pass').setAttribute('aria-label', t.ctaPass + ' — Demo');
+  $('eyebrow').textContent = t.eyebrow;
+  $('list-title').textContent = t.listTitle;
+  $('count-label').textContent = t.countLabel;
+  $('src-label').textContent = t.srcLabel;
+  $('src-suffix').textContent = ' ' + t.srcSuffix;
+  const loadEl = $('loading');
+  if (loadEl.style.display !== 'none') loadEl.textContent = t.loading;
+  $('demo-label').textContent = t.demoToggle;
+  $('demo-flag-label').textContent = t.demoFlag;
+  $('demo-hint').textContent = t.demoHint;
+  $('d-stamp-label').textContent = t.stamp;
+  $('d-route-label').textContent = t.route;
+  $('d-tip-label').textContent = t.tip;
+  $('footnote').textContent = t.footnote;
+  $('btn-print').title = t.print;  $('btn-print').setAttribute('aria-label', t.print);
+  $('btn-export').title = t.exportPng; $('btn-export').setAttribute('aria-label', t.exportPng);
+  $('d-close').setAttribute('aria-label', t.close);
+  document.querySelector('.lang').setAttribute('aria-label', t.langGroup);
+  renderChips();
+  renderList();
+  if (current) setDetail(current); // Badges/Labels im offenen Detail aktualisieren
+}
+document.querySelectorAll('.lang button').forEach(btn => {
+  btn.onclick = () => {
+    lang = btn.dataset.lang;
+    document.querySelectorAll('.lang button').forEach(b => {
+      const on = b === btn;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    applyLang();
+  };
+});
+
+/* ---------- Daten laden ---------- */
+fetch('./data/pois.json?v=2').then(r => r.json()).then(data => {
+  pois = data.pois.filter(p => p.lat && p.lon);
+  pois.forEach(p => { if (!p.category) p.category = 'Natur'; p.geheimtipp = !!p.geheimtipp; });
+  $('loading').style.display = 'none';
+  $('count').textContent = pois.length;
+
+  renderChips();
+  renderList();
+
+  // Marker (die 3 echten POIs als DOM-Pins)
   const bounds = new maplibregl.LngLatBounds();
   pois.forEach(p => {
-    const cat = catFor(p);
     const el = document.createElement('div');
     el.className = 'marker';
-    el.style.setProperty('--pc', CATCOLORS[cat]);
-    el.innerHTML = '<div class="head"></div>';
+    el.style.setProperty('--pc', CATCOLORS[p.category]);
+    el.innerHTML = (p.geheimtipp ? '<span class="star" aria-hidden="true">★</span>' : '') + '<div class="head"></div>';
+    el.setAttribute('role','button');
+    el.setAttribute('aria-label', p.name);
+    el.tabIndex = 0;
     el.onclick = (e) => { e.stopPropagation(); selectPOI(p); };
-    new maplibregl.Marker({ element: el, anchor: 'bottom' }).setLngLat([p.lon, p.lat]).addTo(map);
-    markers.push({ id: p.id, el });
+    el.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selectPOI(p); } };
+    if (mapgl){
+      new maplibregl.Marker({ element: el, anchor: 'bottom' }).setLngLat([p.lon, p.lat]).addTo(mapgl);
+      markers.push({ id: p.id, el, p });
+    }
     bounds.extend([p.lon, p.lat]);
   });
 
   // Frame all markers in the free map area (right of the list, above the detail card).
-  if (pois.length){
-    map.resize(); // ensure the canvas has dimensions before fitting
-    const cw = map.getCanvas().clientWidth || 800;
+  if (pois.length && mapgl){
+    mapgl.resize(); // ensure the canvas has dimensions before fitting
+    const cw = mapgl.getCanvas().clientWidth || 800;
     const pad = cw > 700 ? { left: 430, top: 60, right: 70, bottom: 180 } : 40;
-    map.fitBounds(bounds, { padding: pad, maxZoom: 11.5, duration: 0 });
+    mapgl.fitBounds(bounds, { padding: pad, maxZoom: 11.5, duration: 0 });
     selectPOI(pois[0], false);
   }
 }).catch(err => {
-  document.getElementById('loading').textContent = 'Fehler beim Laden der BayernCloud-Daten.';
+  $('loading').textContent = T().loadError;
   console.error(err);
 });
+}); // Ende initApp (DOMContentLoaded)
 </script>
 </body>
 </html>

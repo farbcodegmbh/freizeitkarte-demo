@@ -4,10 +4,11 @@
 <meta charset="utf-8" />
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Grenzraum entdecken — CMS: Stempelstellen (Mockup)</title>
+<title>Grenzraum entdecken — CMS: Stempelstellen (Demo)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
   :root{
     --bg:#FAF6EE;--surface:#FFFFFF;--ink:#21302A;--muted:#74807A;--faint:#9AA49E;
@@ -19,6 +20,8 @@
   body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
   .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
   svg.ic{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  button{cursor:pointer}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:8px}
   .admin{display:flex;height:100vh}
 
   .nav{flex:0 0 232px;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px}
@@ -40,6 +43,7 @@
   .topbar .count{font-size:13px;color:var(--muted);background:var(--sand);padding:3px 10px;border-radius:999px;font-weight:500}
   .grow{flex:1}
   .btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:500;font-size:13.5px;padding:9px 16px;border-radius:11px;cursor:pointer;border:1px solid var(--pine);background:var(--pine);color:#fff}
+  .btn:hover{background:var(--pine-d)}
   .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
   .btn.ghost:hover{background:var(--sand)}
   .btn svg{width:16px;height:16px}
@@ -50,92 +54,258 @@
   .info p{font-size:12.5px;color:var(--muted);line-height:1.5}.info p b{color:var(--ink);font-weight:600}
 
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:18px 28px 28px}
+  @media (max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:760px){.grid{grid-template-columns:1fr}.admin{display:block;height:auto}.nav{display:none}}
   .qrcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;gap:15px;box-shadow:0 10px 26px -22px rgba(30,50,40,.25)}
-  .qrbox{width:92px;height:92px;border-radius:11px;border:1px solid var(--line-soft);padding:8px;background:#fff;flex:0 0 auto}
-  .qrbox svg{width:100%;height:100%;display:block}
-  .qrcard .meta{min-width:0;display:flex;flex-direction:column}
-  .qrcard .nm{font-size:15px;font-weight:500;display:flex;align-items:center;gap:7px}
-  .qrcard .nm .star{color:var(--gold);font-size:12px}
-  .qrcard .st{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--pine);margin-top:5px}
+  .qrbox{width:96px;height:96px;border-radius:11px;border:1px solid var(--line-soft);padding:8px;background:#fff;flex:0 0 auto;display:grid;place-items:center}
+  .qrbox img,.qrbox canvas{width:80px;height:80px;display:block}
+  .qrbox .noqr{font-size:9px;color:var(--faint);text-align:center;line-height:1.4}
+  .qrcard .meta{min-width:0;display:flex;flex-direction:column;flex:1}
+  .qrcard .nm{font-size:14.5px;font-weight:500;display:flex;align-items:center;gap:7px;line-height:1.25}
+  .qrcard .nm .star{color:var(--gold);font-size:12px;flex:0 0 auto}
+  .qrcard .strow{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap}
+  .qrcard .st{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--pine)}
   .qrcard .st .d{width:6px;height:6px;border-radius:50%;background:var(--pine)}
-  .qrcard .tok{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--faint);margin-top:7px}
+  .demotag{display:inline-flex;align-items:center;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:#7a5512;background:var(--gold-soft);border-radius:999px;padding:2.5px 8px}
+  .qrcard .tok{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--faint);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .qrcard .scans{font-size:12px;color:var(--muted);margin-top:2px}
-  .qrcard .acts{display:flex;gap:7px;margin-top:auto;padding-top:11px}
+  .qrcard .acts{display:flex;gap:7px;margin-top:auto;padding-top:11px;flex-wrap:wrap}
   .mini{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:11.5px;font-weight:500;padding:6px 10px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
   .mini:hover{background:var(--sand)}
   .mini svg{width:13px;height:13px}
   .mini.p{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .mini.p:hover{background:var(--pine-d)}
+
+  /* Toast */
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);z-index:80;background:var(--ink);color:#fff;
+    font-size:12.5px;font-weight:500;padding:10px 16px;border-radius:999px;box-shadow:0 12px 30px -12px rgba(20,35,28,.55);
+    opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;max-width:86%;text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* ---- Druckvorlagen (nur im Druck sichtbar) ---- */
+  #printsheets{display:none}
+  @media print{
+    body{background:#fff}
+    .admin,.toast{display:none !important}
+    #printsheets{display:block}
+    .sheet{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+      min-height:96vh;page-break-after:always;padding:40px;font-family:'Inter',system-ui,sans-serif;color:#21302A}
+    .sheet:last-child{page-break-after:auto}
+    .sheet .brand{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#1D5A43}
+    .sheet h2{font-family:'Fraunces',Georgia,serif;font-size:34px;font-weight:500;margin-top:12px}
+    .sheet .qrbig{margin:34px 0 26px;padding:22px;border:2px solid #EAE3D6;border-radius:22px}
+    .sheet .qrbig img,.sheet .qrbig canvas{width:300px;height:300px;display:block}
+    .sheet .instr{font-size:20px;font-weight:600}
+    .sheet .sub{font-size:13.5px;color:#74807A;max-width:420px;line-height:1.6;margin-top:10px}
+    .sheet .tok{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#9AA49E;margin-top:24px}
+    .sheet .demo{font-size:10.5px;color:#9AA49E;margin-top:6px}
+  }
 </style>
 </head>
 <body>
-<svg style="position:absolute;width:0;height:0"><symbol id="qr" viewBox="0 0 29 29">
-  <rect width="29" height="29" fill="#fff"/>
-  <g fill="#1b241f">
-    <!-- finder TL --><path d="M0 0h7v7h-7z"/><path d="M1 1h5v5h-5z" fill="#fff"/><rect x="2" y="2" width="3" height="3"/>
-    <!-- finder TR --><path d="M22 0h7v7h-7z"/><path d="M23 1h5v5h-5z" fill="#fff"/><rect x="24" y="2" width="3" height="3"/>
-    <!-- finder BL --><path d="M0 22h7v7h-7z"/><path d="M1 23h5v5h-5z" fill="#fff"/><rect x="2" y="24" width="3" height="3"/>
-    <!-- timing + data scatter -->
-    <rect x="8" y="6" width="1" height="1"/><rect x="10" y="6" width="1" height="1"/><rect x="12" y="6" width="1" height="1"/>
-    <rect x="9" y="8" width="1" height="1"/><rect x="11" y="8" width="2" height="1"/><rect x="14" y="8" width="1" height="2"/>
-    <rect x="8" y="9" width="1" height="2"/><rect x="16" y="8" width="1" height="1"/><rect x="18" y="8" width="1" height="1"/>
-    <rect x="20" y="9" width="1" height="1"/><rect x="22" y="9" width="2" height="1"/><rect x="25" y="9" width="1" height="2"/>
-    <rect x="10" y="10" width="1" height="1"/><rect x="12" y="10" width="2" height="1"/><rect x="15" y="11" width="1" height="2"/>
-    <rect x="17" y="10" width="1" height="2"/><rect x="19" y="11" width="2" height="1"/><rect x="23" y="11" width="1" height="2"/>
-    <rect x="9" y="13" width="2" height="1"/><rect x="12" y="13" width="1" height="2"/><rect x="6" y="12" width="1" height="2"/>
-    <rect x="8" y="15" width="1" height="1"/><rect x="11" y="15" width="1" height="1"/><rect x="13" y="16" width="2" height="1"/>
-    <rect x="16" y="14" width="1" height="2"/><rect x="18" y="15" width="2" height="1"/><rect x="21" y="14" width="1" height="2"/>
-    <rect x="24" y="14" width="1" height="1"/><rect x="26" y="15" width="1" height="2"/><rect x="8" y="18" width="2" height="1"/>
-    <rect x="11" y="18" width="1" height="2"/><rect x="14" y="19" width="1" height="1"/><rect x="16" y="18" width="1" height="2"/>
-    <rect x="19" y="19" width="2" height="1"/><rect x="22" y="18" width="1" height="2"/><rect x="25" y="19" width="2" height="1"/>
-    <rect x="9" y="21" width="1" height="1"/><rect x="12" y="22" width="1" height="2"/><rect x="14" y="23" width="2" height="1"/>
-    <rect x="17" y="22" width="1" height="2"/><rect x="20" y="23" width="1" height="1"/><rect x="22" y="24" width="2" height="1"/>
-    <rect x="25" y="23" width="1" height="2"/><rect x="9" y="25" width="2" height="1"/><rect x="13" y="26" width="1" height="1"/>
-    <rect x="16" y="26" width="2" height="1"/><rect x="19" y="25" width="1" height="2"/><rect x="22" y="27" width="1" height="1"/>
-  </g>
-</symbol></svg>
-
 <div class="admin">
   <aside class="nav">
-    <div class="brand"><div class="logo"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M3 20l6-16 6 7 3-3 3 12z"/></svg></div><div><b>Grenzraum</b><span>Redaktion</span></div></div>
+    <div class="brand"><div class="logo"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px" aria-hidden="true"><path d="M3 20l6-16 6 7 3-3 3 12z"/></svg></div><div><b>Grenzraum</b><span>Redaktion</span></div></div>
     <div class="grp">Inhalte</div>
-    <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Ziele</a>
-    <a href="#"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Kategorien</a>
-    <a href="#" class="on"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>Stempelstellen</a>
-    <a href="#"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-4 4 3 4-5 5 6"/></svg>Medien</a>
+    <a href="cms-liste.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Ziele</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Kategorien</a>
+    <a href="#" class="on" aria-current="page"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>Stempelstellen</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-4 4 3 4-5 5 6"/></svg>Medien</a>
     <div class="grp">Verwaltung</div>
-    <a href="#"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0114 0"/></svg>Nutzer &amp; Rechte</a>
-    <a href="#"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.1-1l2-1.6-2-3.4-2.3 1a7 7 0 00-1.7-1L14 3h-4l-.6 2.6a7 7 0 00-1.7 1l-2.3-1-2 3.4L4.1 11a7 7 0 000 2L2 14.6l2 3.4 2.3-1a7 7 0 001.7 1L10 21h4l.6-2.6a7 7 0 001.7-1l2.3 1 2-3.4L18.9 13c.1-.3.1-.7.1-1z"/></svg>Einstellungen</a>
-    <div class="user"><div class="ava">SK</div><div><div class="t">Sabine K.</div><div class="r">Redakteurin</div></div></div>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0114 0"/></svg>Nutzer &amp; Rechte</a>
+    <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.1-1l2-1.6-2-3.4-2.3 1a7 7 0 00-1.7-1L14 3h-4l-.6 2.6a7 7 0 00-1.7 1l-2.3-1-2 3.4L4.1 11a7 7 0 000 2L2 14.6l2 3.4 2.3-1a7 7 0 001.7 1L10 21h4l.6-2.6a7 7 0 001.7-1l2.3 1 2-3.4L18.9 13c.1-.3.1-.7.1-1z"/></svg>Einstellungen</a>
+    <div class="user"><div class="ava" aria-hidden="true">SK</div><div><div class="t">Sabine K.</div><div class="r">Redakteurin</div></div></div>
   </aside>
 
   <div class="content">
     <div class="topbar">
       <h1 class="serif">Stempelstellen</h1>
-      <span class="count">8 QR-Codes</span>
+      <span class="count" id="countBadge">8 QR-Codes</span>
       <div class="grow"></div>
-      <button class="btn ghost"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg>Alle Druckvorlagen (PDF)</button>
-      <button class="btn"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Neue Stempelstelle</button>
+      <button class="btn ghost" id="btnPrintAll"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg>Alle Druckvorlagen (PDF)</button>
+      <button class="btn" id="btnNew"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Neue Stempelstelle</button>
     </div>
 
     <div class="info">
-      <div class="ico"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M14 3h7v7M3 14h7v7"/></svg></div>
-      <p><b>QR-Codes werden hier generiert</b> und als druckfertige PDF-/SVG-Vorlage exportiert — Produktion &amp; Montage der Schilder übernimmt der Auftraggeber. <b>Manipulationsschutz:</b> jeder Code trägt ein signiertes Token, das bei Bedarf erneuert werden kann (alte Codes werden ungültig).</p>
+      <div class="ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M14 3h7v7M3 14h7v7"/></svg></div>
+      <p><b>Echte, scanbare QR-Codes</b> — jeder Code verlinkt direkt in den digitalen Stempelpass (Deep-Link mit Token) und wird als druckfertige Vorlage exportiert; Produktion &amp; Montage der Schilder übernimmt der Auftraggeber. <b>Manipulationsschutz:</b> jeder Code trägt ein signiertes Token, das bei Bedarf erneuert werden kann (alte Codes werden ungültig). In dieser Demo: Codes mit der Handykamera scannen oder <a href="stempelpass.html">den Stempelpass öffnen</a>.</p>
     </div>
 
-    <div class="grid">
-      <div class="qrcard"><div class="qrbox"><svg><use href="#qr"/></svg></div><div class="meta"><div class="nm">Rißlochfälle <span class="star">★</span></div><div class="st"><span class="d"></span>Aktiv</div><div class="tok">tok_a3f9·c21e</div><div class="scans">142 Scans</div><div class="acts"><button class="mini p"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"/></svg>Druckvorlage</button><button class="mini"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg>Token</button></div></div></div>
-
-      <div class="qrcard"><div class="qrbox"><svg><use href="#qr"/></svg></div><div class="meta"><div class="nm">Kleiner Arbersee <span class="star">★</span></div><div class="st"><span class="d"></span>Aktiv</div><div class="tok">tok_7b12·9da4</div><div class="scans">98 Scans</div><div class="acts"><button class="mini p"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"/></svg>Druckvorlage</button><button class="mini"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg>Token</button></div></div></div>
-
-      <div class="qrcard"><div class="qrbox"><svg><use href="#qr"/></svg></div><div class="meta"><div class="nm">Schwarzer See <span class="star">★</span></div><div class="st"><span class="d"></span>Aktiv</div><div class="tok">tok_e5c0·1f83</div><div class="scans">76 Scans</div><div class="acts"><button class="mini p"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"/></svg>Druckvorlage</button><button class="mini"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg>Token</button></div></div></div>
-
-      <div class="qrcard"><div class="qrbox"><svg><use href="#qr"/></svg></div><div class="meta"><div class="nm">Pröller <span class="star">★</span></div><div class="st"><span class="d"></span>Aktiv</div><div class="tok">tok_2a77·b60d</div><div class="scans">61 Scans</div><div class="acts"><button class="mini p"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"/></svg>Druckvorlage</button><button class="mini"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg>Token</button></div></div></div>
-
-      <div class="qrcard"><div class="qrbox"><svg><use href="#qr"/></svg></div><div class="meta"><div class="nm">Teufelsloch <span class="star">★</span></div><div class="st"><span class="d"></span>Aktiv</div><div class="tok">tok_9f31·44ae</div><div class="scans">34 Scans</div><div class="acts"><button class="mini p"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"/></svg>Druckvorlage</button><button class="mini"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg>Token</button></div></div></div>
-
-      <div class="qrcard"><div class="qrbox"><svg><use href="#qr"/></svg></div><div class="meta"><div class="nm">Höllbachg’spreng <span class="star">★</span></div><div class="st"><span class="d"></span>Aktiv</div><div class="tok">tok_c8e2·07b5</div><div class="scans">52 Scans</div><div class="acts"><button class="mini p"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"/></svg>Druckvorlage</button><button class="mini"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg>Token</button></div></div></div>
-    </div>
+    <div class="grid" id="qrGrid" aria-label="QR-Codes der Stempelstellen"></div>
   </div>
 </div>
+
+<!-- Druckvorlagen: wird per JS befüllt, nur @media print sichtbar -->
+<div id="printsheets" aria-hidden="true"></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+/* =====================================================================
+   STEMPELZIELE — identische Liste + Demo-Token wie in stempelpass.html
+   (Konstante dort dupliziert; bei Änderungen beide Dateien anpassen!)
+   Token-Format: GRZR-<slug>-<4hex>
+   ===================================================================== */
+var ZIELE = [
+  { slug:'grosser-falkenstein',    name:'Großer Falkenstein',           token:'GRZR-grosser-falkenstein-7c4e',    scans:187 },
+  { slug:'ruckowitzschachten',     name:'Ruckowitzschachten',           token:'GRZR-ruckowitzschachten-a91d',     scans:121 },
+  { slug:'lindberger-schachten',   name:'Lindberger Schachten',         token:'GRZR-lindberger-schachten-3f82',   scans:64  },
+  { slug:'risslochfaelle',         name:'Rißlochfälle',                 token:'GRZR-risslochfaelle-b5c7',         scans:142 },
+  { slug:'kleiner-arbersee',       name:'Kleiner Arbersee',             token:'GRZR-kleiner-arbersee-e2a9',       scans:98  },
+  { slug:'schwarzer-see',          name:'Schwarzer See / Černé jezero', token:'GRZR-schwarzer-see-6d10',          scans:76  },
+  { slug:'pancir-gipfel',          name:'Pancíř-Gipfel',                token:'GRZR-pancir-gipfel-48fb',          scans:53  },
+  { slug:'burgruine-weissenstein', name:'Burgruine Weißenstein',        token:'GRZR-burgruine-weissenstein-90ce', scans:88  }
+];
+
+/* Deep-Link-Ziel der QR-Codes: die deployte Stempelpass-Demo (GitHub Pages, Unterpfad) */
+var BASE_URL = 'https://farbcodegmbh.github.io/freizeitkarte-demo/stempelpass.html';
+function stampUrl(token){ return BASE_URL + '?stamp=' + token; }
+function shortToken(token){
+  var hex = token.slice(-4);
+  return 'GRZR-…-' + hex;
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+var $ = function(id){ return document.getElementById(id); };
+var qrInstances = {}; /* slug -> QRCode-Instanz */
+
+/* ---------------- Karten rendern ---------------- */
+function buildCards(){
+  var grid = $('qrGrid');
+  grid.innerHTML = '';
+  ZIELE.forEach(function(z){
+    var card = document.createElement('article');
+    card.className = 'qrcard';
+    card.innerHTML =
+      '<div class="qrbox" id="qr-' + z.slug + '" role="img" aria-label="QR-Code für ' + esc(z.name) + '"></div>' +
+      '<div class="meta">' +
+        '<div class="nm">' + esc(z.name) + ' <span class="star" aria-label="Geheimtipp">★</span></div>' +
+        '<div class="strow"><span class="st"><span class="d" aria-hidden="true"></span>Aktiv</span><span class="demotag">Demo-Token</span></div>' +
+        '<div class="tok" id="tok-' + z.slug + '" title="' + esc(z.token) + '">' + esc(shortToken(z.token)) + '</div>' +
+        '<div class="scans">' + z.scans + ' Scans</div>' +
+        '<div class="acts">' +
+          '<button class="mini p" data-print="' + z.slug + '"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"/></svg>Druckvorlage (PDF)</button>' +
+          '<button class="mini" data-renew="' + z.slug + '"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg>Token erneuern</button>' +
+        '</div>' +
+      '</div>';
+    grid.appendChild(card);
+    renderQr(z);
+  });
+}
+
+function renderQr(z){
+  var box = $('qr-' + z.slug);
+  if(!box) return;
+  if(typeof QRCode === 'undefined'){
+    box.innerHTML = '<span class="noqr">QR-Bibliothek<br>nicht geladen</span>';
+    return;
+  }
+  var url = stampUrl(z.token);
+  if(qrInstances[z.slug]){
+    qrInstances[z.slug].makeCode(url);
+  }else{
+    box.innerHTML = '';
+    /* Intern hochauflösend rendern (320px), Anzeige via CSS auf 80px —
+       sonst wären die ~41 QR-Module bei 80px < 2px breit und schlecht scanbar */
+    qrInstances[z.slug] = new QRCode(box, {
+      text: url, width: 320, height: 320,
+      colorDark: '#1b241f', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+  box.title = ''; /* qrcodejs setzt die URL als title — für die Demo neutral halten */
+  box.setAttribute('aria-label', 'QR-Code für ' + z.name + ' — verlinkt in den Stempelpass');
+  var img = box.querySelector('img');
+  if(img) img.alt = 'QR-Code für ' + z.name;
+}
+
+/* ---------------- Token erneuern ---------------- */
+function newHex4(){
+  var b = new Uint8Array(2);
+  (window.crypto || {getRandomValues:function(a){for(var i=0;i<a.length;i++)a[i]=Math.floor(Math.random()*256);}}).getRandomValues(b);
+  return Array.prototype.map.call(b, function(x){ return ('0'+x.toString(16)).slice(-2); }).join('');
+}
+function renewToken(slug){
+  var z = ZIELE.find(function(x){ return x.slug === slug; });
+  if(!z) return;
+  z.token = 'GRZR-' + z.slug + '-' + newHex4();
+  var tokEl = $('tok-' + slug);
+  if(tokEl){ tokEl.textContent = shortToken(z.token); tokEl.title = z.token; }
+  renderQr(z);
+  toast('Demo: alter Code verliert Gültigkeit — neues Token für „' + z.name + '“ generiert.');
+}
+
+/* ---------------- Druckvorlagen ---------------- */
+function buildSheets(list){
+  var wrap = $('printsheets');
+  wrap.innerHTML = '';
+  list.forEach(function(z){
+    var sheet = document.createElement('div');
+    sheet.className = 'sheet';
+    sheet.innerHTML =
+      '<div class="brand">Grenzraum entdecken · Digitaler Stempelpass</div>' +
+      '<h2>' + esc(z.name) + '</h2>' +
+      '<div class="qrbig" id="pqr-' + z.slug + '"></div>' +
+      '<div class="instr">Schild scannen &amp; Stempel sichern</div>' +
+      '<p class="sub">QR-Code einfach mit der Handykamera scannen — der Stempel wird automatisch in deinem digitalen Stempelpass gesichert. Kein App-Store, kein Konto nötig.</p>' +
+      '<div class="tok">' + esc(z.token) + '</div>' +
+      '<div class="demo">Demo-Druckvorlage — finale Vorlagen entstehen in der Umsetzung (PDF/SVG, druckfertig).</div>';
+    wrap.appendChild(sheet);
+    if(typeof QRCode !== 'undefined'){
+      /* Druck: intern 600px rendern, Anzeige 300px — scharfe Module im PDF */
+      new QRCode(sheet.querySelector('#pqr-' + z.slug), {
+        text: stampUrl(z.token), width: 600, height: 600,
+        colorDark: '#1b241f', colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      var img = sheet.querySelector('#pqr-' + z.slug + ' img');
+      if(img) img.alt = 'QR-Code für ' + z.name;
+    }
+  });
+}
+function printSheets(list){
+  buildSheets(list);
+  /* kurz warten, bis die QR-<img> aus dem Canvas übernommen sind */
+  setTimeout(function(){ window.print(); }, 250);
+}
+
+/* ---------------- Toast ---------------- */
+var toastTimer = null;
+function toast(txt){
+  var el = $('toast');
+  el.textContent = txt;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 3200);
+}
+
+/* ---------------- Events ---------------- */
+document.addEventListener('click', function(e){
+  var p = e.target.closest('[data-print]');
+  if(p){ var z = ZIELE.find(function(x){ return x.slug === p.getAttribute('data-print'); }); if(z) printSheets([z]); return; }
+  var r = e.target.closest('[data-renew]');
+  if(r){ renewToken(r.getAttribute('data-renew')); return; }
+});
+$('btnPrintAll').addEventListener('click', function(){ printSheets(ZIELE); });
+$('btnNew').addEventListener('click', function(){
+  toast('Demo: In der Umsetzung öffnet sich hier der Dialog zum Anlegen einer neuen Stempelstelle.');
+});
+
+/* ---------------- Start ---------------- */
+function init(){
+  $('countBadge').textContent = ZIELE.length + ' QR-Codes';
+  buildCards();
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', function(){
+    /* defer-Script (qrcode.min.js) ist zu diesem Zeitpunkt geladen */
+    init();
+  });
+}else{
+  init();
+}
+</script>
 </body>
 </html>

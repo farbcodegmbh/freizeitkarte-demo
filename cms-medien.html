@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grenzraum entdecken — CMS: Medien (Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EE;--surface:#FFFFFF;--ink:#21302A;--muted:#74807A;--faint:#9AA49E;
+    --line:#EAE3D6;--line-soft:#F1ECE2;--pine:#1D5A43;--pine-d:#16493B;--sand:#F3ECDD;
+    --gold:#C68A2E;--gold-soft:#F2E2C2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
+  svg.ic{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .admin{display:flex;height:100vh}
+  :focus-visible{outline:2.5px solid var(--pine);outline-offset:2px;border-radius:8px}
+  [hidden]{display:none!important}
+
+  .nav{flex:0 0 232px;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px}
+  .nav .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 18px}
+  .nav .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(150deg,#2c6f54,#143f30);display:grid;place-items:center;color:#fff}
+  .nav .brand b{font-size:14.5px;font-weight:600}.nav .brand span{font-size:11px;color:var(--muted);display:block;margin-top:1px}
+  .nav .grp{font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:14px 10px 6px}
+  .nav a{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:11px;color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:450}
+  .nav a svg{width:18px;height:18px;color:var(--muted)}
+  .nav a:hover{background:var(--sand)}
+  .nav a.on{background:#EBF1E8;color:var(--pine);font-weight:600}.nav a.on svg{color:var(--pine)}
+  .nav .user{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--line-soft)}
+  .nav .ava{width:32px;height:32px;border-radius:50%;background:var(--gold-soft);color:#7a5512;display:grid;place-items:center;font-size:12px;font-weight:700}
+  .nav .user .t{font-size:12.5px;font-weight:500}.nav .user .r{font-size:11px;color:var(--muted)}
+
+  .content{flex:1;display:flex;flex-direction:column;min-width:0;overflow-y:auto}
+  .topbar{display:flex;align-items:center;gap:14px;padding:18px 28px 12px}
+  .topbar h1{font-size:24px;font-weight:500;letter-spacing:-.01em}
+  .topbar .count{font-size:13px;color:var(--muted);background:var(--sand);padding:3px 10px;border-radius:999px;font-weight:500}
+  .grow{flex:1}
+  .srcnote{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+  .srcnote svg{width:14px;height:14px;color:var(--pine)}
+
+  .filters{display:flex;align-items:center;gap:10px;padding:4px 28px 16px}
+  .filters .lbl{font-size:12px;color:var(--muted);font-weight:500}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fff}
+  .seg button{font:inherit;font-size:13px;font-weight:500;color:var(--muted);background:#fff;border:0;border-right:1px solid var(--line);padding:8px 15px;cursor:pointer}
+  .seg button:last-child{border-right:0}
+  .seg button.on{background:var(--pine);color:#fff}
+  .seg button:hover:not(.on){background:var(--sand)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;padding:0 28px 28px}
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;text-align:left;font:inherit;color:inherit;padding:0;box-shadow:0 10px 26px -20px rgba(30,50,40,.25);transition:transform .15s,box-shadow .15s;display:flex;flex-direction:column}
+  .tile:hover{transform:translateY(-2px);box-shadow:0 16px 30px -18px rgba(30,50,40,.35)}
+  .tile .imgwrap{position:relative;aspect-ratio:4/3;background:var(--sand)}
+  .tile img{width:100%;height:100%;object-fit:cover;display:block}
+  .tile .src{position:absolute;left:8px;bottom:8px;font-size:9.5px;font-weight:600;color:#fff;background:rgba(20,35,28,.7);padding:2.5px 8px;border-radius:999px;backdrop-filter:blur(2px)}
+  .tile .meta{padding:11px 13px 13px}
+  .tile .fn{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tile .row{display:flex;align-items:center;gap:7px;margin-top:7px;flex-wrap:wrap}
+  .lic{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;letter-spacing:.03em;color:var(--pine);background:#EBF1E8;padding:3px 8px;border-radius:999px}
+  .lic.by{color:#7a5512;background:var(--gold-soft)}
+  .tile .cop{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .upload{border:1.5px dashed #D7D0C2;border-radius:16px;background:#FCFAF5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:var(--muted);font-size:12.5px;font-weight:500;cursor:pointer;min-height:230px;font-family:inherit;text-align:center;padding:16px}
+  .upload:hover{background:var(--sand);color:var(--ink)}
+  .upload svg{width:24px;height:24px}
+  .upload small{font-size:11px;color:var(--faint);font-weight:400;line-height:1.4}
+
+  .state{grid-column:1/-1;padding:36px 20px;text-align:center;color:var(--muted);font-size:13.5px}
+  .state b{display:block;font-family:'Fraunces',serif;font-size:17px;color:var(--ink);font-weight:500;margin-bottom:5px}
+
+  /* Detail-Popover */
+  .modal{position:fixed;inset:0;z-index:350;display:grid;place-items:center;padding:24px}
+  .modal[hidden]{display:none}
+  .modal .backdrop{position:absolute;inset:0;background:rgba(20,35,28,.48);backdrop-filter:blur(3px)}
+  .modal .dlg{position:relative;width:min(460px,100%);max-height:calc(100vh - 48px);overflow-y:auto;background:#fff;border-radius:22px;box-shadow:0 30px 70px -30px rgba(15,35,26,.6);animation:pop .22s ease}
+  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+  .modal .x{position:absolute;top:12px;right:12px;z-index:2;width:32px;height:32px;border-radius:50%;border:0;background:rgba(20,35,28,.55);color:#fff;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(2px)}
+  .modal .x svg{width:15px;height:15px}
+  .modal .x:hover{background:rgba(20,35,28,.75)}
+  .modal .hero{aspect-ratio:16/9;background:var(--sand)}
+  .modal .hero img{width:100%;height:100%;object-fit:cover;display:block}
+  .modal .pad{padding:17px 20px 20px}
+  .modal h4{font-size:19px;font-weight:500;letter-spacing:-.01em}
+  .modal .sub{font-size:12px;color:var(--muted);margin-top:3px}
+  .field{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+  .field label{font-size:12.5px;font-weight:500}
+  .field label .req{color:var(--gold);font-weight:700}
+  .input,.textarea{width:100%;font:inherit;font-size:13.5px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+  .input:focus,.textarea:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(29,90,67,.12)}
+  .textarea{min-height:64px;resize:none;line-height:1.5}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .modal .foot{display:flex;align-items:center;gap:10px;margin-top:18px}
+  .modal .req-note{font-size:11.5px;color:var(--muted)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:500;font-size:13.5px;padding:9px 16px;border-radius:11px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .btn:hover{background:var(--sand)}
+  .btn.primary{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .btn.primary:hover{background:var(--pine-d)}
+  .btn svg{width:16px;height:16px}
+
+  .toast{position:fixed;right:22px;bottom:22px;z-index:400;display:flex;align-items:center;gap:10px;background:var(--pine);color:#fff;font-size:13px;font-weight:500;padding:11px 16px;border-radius:12px;box-shadow:0 14px 30px -12px rgba(20,50,38,.5);opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none;max-width:340px}
+  .toast.show{opacity:1;transform:none}
+  .toast .tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.18);padding:2.5px 8px;border-radius:999px;flex:0 0 auto}
+</style>
+</head>
+<body>
+<div class="admin">
+  <aside class="nav">
+    <div class="brand">
+      <div class="logo"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M3 20l6-16 6 7 3-3 3 12z"/></svg></div>
+      <div><b>Grenzraum</b><span>Redaktion</span></div>
+    </div>
+    <div class="grp">Inhalte</div>
+    <a href="cms-liste.html"><svg class="ic" viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Ziele</a>
+    <a href="#" data-demo="Kategorien"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Kategorien</a>
+    <a href="cms-qr.html"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg>Stempelstellen</a>
+    <a href="cms-medien.html" class="on" aria-current="page"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-4 4 3 4-5 5 6"/></svg>Medien</a>
+    <div class="grp">Verwaltung</div>
+    <a href="cms-rechte.html"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0114 0"/></svg>Nutzer &amp; Rechte</a>
+    <a href="#" data-demo="Einstellungen"><svg class="ic" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 13a7.9 7.9 0 000-2l2-1.5-2-3.5-2.4 1a8 8 0 00-1.7-1L17 3h-4l-.3 2.5a8 8 0 00-1.7 1l-2.4-1-2 3.5L6.6 11a7.9 7.9 0 000 2l-2 1.5 2 3.5 2.4-1a8 8 0 001.7 1L13 21h4l-.6-2.5a8 8 0 001.7-1l2.4 1 2-3.5z"/></svg>Einstellungen</a>
+    <div class="user"><div class="ava">SK</div><div><div class="t">Sabine K.</div><div class="r">Redakteurin</div></div></div>
+  </aside>
+
+  <div class="content">
+    <div class="topbar">
+      <h1 class="serif">Medien</h1>
+      <span class="count" id="countPill">…</span>
+      <div class="grow"></div>
+      <div class="srcnote"><svg class="ic" viewBox="0 0 24 24"><path d="M6 17a4.5 4.5 0 01-.4-9A6 6 0 0117.3 9.6 4 4 0 0117 17H6z"/></svg>Bilder live aus der BayernCloud Tourismus — mit Lizenz &amp; Urheber</div>
+    </div>
+
+    <div class="filters" role="group" aria-label="Nach Lizenz filtern">
+      <span class="lbl">Lizenz:</span>
+      <div class="seg">
+        <button class="on" data-filter="alle" aria-pressed="true">Alle</button>
+        <button data-filter="CC BY-SA" aria-pressed="false">CC BY-SA</button>
+        <button data-filter="CC BY" aria-pressed="false">CC BY</button>
+      </div>
+    </div>
+
+    <div class="grid" id="grid" aria-live="polite">
+      <div class="state" id="loading"><b>Medien werden geladen …</b>data/pois.json wird gelesen.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail-Popover -->
+<div class="modal" id="detail" role="dialog" aria-modal="true" aria-labelledby="dName" hidden>
+  <div class="backdrop" data-close></div>
+  <div class="dlg">
+    <button class="x" id="dClose" aria-label="Details schließen"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="hero"><img id="dImg" src="" alt=""></div>
+    <div class="pad">
+      <h4 class="serif" id="dName">Dateiname</h4>
+      <div class="sub" id="dSub">Quelle: BayernCloud Tourismus API</div>
+      <div class="twocol">
+        <div class="field">
+          <label for="dLic">Lizenz <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" id="dLic" value="" aria-required="true">
+        </div>
+        <div class="field">
+          <label for="dCop">Urheber <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" id="dCop" value="" aria-required="true">
+        </div>
+      </div>
+      <div class="field">
+        <label for="dAlt">Alt-Text (Barrierefreiheit) <span class="req" aria-hidden="true">*</span></label>
+        <textarea class="textarea" id="dAlt" aria-required="true"></textarea>
+      </div>
+      <div class="foot">
+        <span class="req-note"><span style="color:var(--gold);font-weight:700">*</span> Pflichtfelder — ohne Lizenz, Urheber und Alt-Text keine Veröffentlichung.</span>
+        <span style="flex:1"></span>
+        <button class="btn primary" id="dSave"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Übernehmen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span class="msg"></span><span class="tag">Demo</span></div>
+
+<script>
+(function(){
+  'use strict';
+  var $=function(id){return document.getElementById(id);};
+
+  /* Toast */
+  var toastTimer=null;
+  function toast(msg){
+    var t=$('toast');
+    t.querySelector('.msg').textContent=msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){t.classList.remove('show');},2600);
+  }
+
+  /* Sidebar-Demo-Links */
+  document.querySelectorAll('.nav a[data-demo]').forEach(function(a){
+    a.addEventListener('click',function(e){e.preventDefault();toast(a.dataset.demo+' — Bereich folgt im Produktivsystem');});
+  });
+
+  var altTexts={
+    'grosser-falkenstein':'Gipfelkreuz des Großen Falkensteins mit Blick über die Wälder des Nationalparks Bayerischer Wald',
+    'lindberger-schachten':'Offene Weidefläche des Lindberger Schachten mit einzelnen Bäumen und Schutzhütte',
+    'ruckowitzschachten':'Weite Bergwiese des Ruckowitzschachten auf dem Höhenkamm des Falkensteinmassivs'
+  };
+
+  function licShort(item){
+    var u=(item.license||'').toLowerCase();
+    if(u.indexOf('by-sa')!==-1){return 'CC BY-SA';}
+    if(u.indexOf('licenses/by/')!==-1||/\/by\/?/.test(u)){return 'CC BY';}
+    if(u.indexOf('zero')!==-1||u.indexOf('cc0')!==-1){return 'CC0';}
+    return (item.copyright||'Lizenz unbekannt').split(' ').slice(0,3).join(' ');
+  }
+  function licVersion(item){
+    var m=(item.copyright||'').match(/CC [A-Z-]+ ([\d.]+)/);
+    return m?licShort(item)+' '+m[1]:licShort(item);
+  }
+  function author(item){
+    var c=item.copyright||'';
+    var m=c.match(/^CC [A-Z-]+ [\d.]+\s+(.*)$/);
+    return m?m[1]:c;
+  }
+  function fileName(item){
+    try{
+      var seg=item.image.split('/').pop();
+      return decodeURIComponent(seg);
+    }catch(e){return (item.slug||'bild')+'.jpg';}
+  }
+
+  var media=[];
+  var activeFilter='alle';
+  var grid=$('grid');
+
+  function render(){
+    grid.innerHTML='';
+    var shown=media.filter(function(m){return activeFilter==='alle'||m.licS===activeFilter;});
+
+    shown.forEach(function(m){
+      var b=document.createElement('button');
+      b.className='tile';
+      b.type='button';
+      b.setAttribute('aria-label','Mediendetails öffnen: '+m.file+', Lizenz '+m.licV+', Urheber '+m.author);
+      b.innerHTML=
+        '<span class="imgwrap"><img loading="lazy" src="'+m.thumb+'" alt="'+m.alt.replace(/"/g,'&quot;')+'">'+
+        '<span class="src">BayernCloud</span></span>'+
+        '<span class="meta"><span class="fn">'+m.file+'</span>'+
+        '<span class="row"><span class="lic'+(m.licS==='CC BY'?' by':'')+'">'+m.licS+'</span>'+
+        '<span class="cop">© '+m.author+'</span></span></span>';
+      b.addEventListener('click',function(){openDetail(m);});
+      grid.appendChild(b);
+    });
+
+    if(shown.length===0){
+      var st=document.createElement('div');
+      st.className='state';
+      st.innerHTML='<b>Keine Medien mit Lizenz '+activeFilter+'</b>Der Demo-Datenbestand aus der BayernCloud enthält aktuell nur CC-BY-SA-Bilder.';
+      grid.appendChild(st);
+    }
+
+    /* Upload-Kachel immer anhängen */
+    var up=document.createElement('button');
+    up.className='upload';
+    up.type='button';
+    up.setAttribute('aria-label','Bild hochladen (Demo)');
+    up.innerHTML='<svg class="ic" viewBox="0 0 24 24"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5"/><path d="M4 17v2a1.5 1.5 0 001.5 1.5h13A1.5 1.5 0 0020 19v-2"/></svg>Bild hochladen<small>JPG/PNG · Lizenz &amp; Urheber<br>sind Pflichtangaben</small>';
+    up.addEventListener('click',function(){toast('Upload folgt im Produktivsystem');});
+    grid.appendChild(up);
+
+    $('countPill').textContent=shown.length+(shown.length===1?' Medium':' Medien');
+  }
+
+  /* Filter */
+  document.querySelectorAll('.seg button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.seg button').forEach(function(x){
+        x.classList.remove('on');x.setAttribute('aria-pressed','false');
+      });
+      b.classList.add('on');b.setAttribute('aria-pressed','true');
+      activeFilter=b.dataset.filter;
+      render();
+    });
+  });
+
+  /* Detail-Popover */
+  var modal=$('detail');
+  var lastFocus=null;
+  function openDetail(m){
+    $('dImg').src=m.thumb;
+    $('dImg').alt=m.alt;
+    $('dName').textContent=m.file;
+    $('dSub').textContent='Quelle: BayernCloud Tourismus API · verwendet bei „'+m.name+'“';
+    $('dLic').value=m.licV;
+    $('dCop').value=m.author;
+    $('dAlt').value=m.alt;
+    lastFocus=document.activeElement;
+    modal.hidden=false;
+    $('dClose').focus();
+  }
+  function closeDetail(){
+    modal.hidden=true;
+    if(lastFocus&&lastFocus.focus){lastFocus.focus();}
+  }
+  $('dClose').addEventListener('click',closeDetail);
+  modal.querySelector('[data-close]').addEventListener('click',closeDetail);
+  $('dSave').addEventListener('click',function(){closeDetail();toast('Metadaten gespeichert');});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&!modal.hidden){closeDetail();}
+  });
+
+  /* Daten laden */
+  fetch('data/pois.json')
+    .then(function(r){if(!r.ok){throw new Error('HTTP '+r.status);}return r.json();})
+    .then(function(json){
+      media=(json.pois||[]).map(function(p){
+        return {
+          name:p.name,
+          slug:p.slug,
+          thumb:p.thumb||p.image,
+          image:p.image,
+          file:fileName(p),
+          licS:licShort(p),
+          licV:licVersion(p),
+          author:author(p),
+          alt:altTexts[p.slug]||('Foto: '+p.name+' ('+(p.locality||'Bayerischer Wald')+')')
+        };
+      });
+      render();
+    })
+    .catch(function(err){
+      grid.innerHTML='<div class="state"><b>Medien konnten nicht geladen werden</b>data/pois.json ist nicht erreichbar ('+String(err.message||err)+'). Bitte die Demo über einen Webserver öffnen.</div>';
+      $('countPill').textContent='—';
+    });
+})();
+</script>
+</body>
+</html>

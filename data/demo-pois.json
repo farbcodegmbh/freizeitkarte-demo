@@ -1,0 +1,609 @@
+{
+  "source": "Synthetischer Beispieldatensatz (keine echten Ziele)",
+  "fetchedLive": false,
+  "region": "Landkreis Regen + Bezirk Klattau (bbox 12.9-13.6 / 48.9-49.35)",
+  "note": "Nur zur Demonstration von Clustering, Filtern und Lastverhalten in der Demo-Karte.",
+  "count": 40,
+  "pois": [
+    {
+      "id": "demo-01",
+      "slug": "beispielziel-01",
+      "name": "Beispielziel 01",
+      "lat": 49.019025,
+      "lon": 13.089371,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-02",
+      "slug": "beispielziel-02",
+      "name": "Beispielziel 02",
+      "lat": 49.019442,
+      "lon": 13.232991,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-03",
+      "slug": "beispielziel-03",
+      "name": "Beispielziel 03",
+      "lat": 48.952676,
+      "lon": 13.158268,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-04",
+      "slug": "beispielziel-04",
+      "name": "Beispielziel 04",
+      "lat": 49.154594,
+      "lon": 13.233353,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-05",
+      "slug": "beispielziel-05",
+      "name": "Beispielziel 05",
+      "lat": 49.345,
+      "lon": 13.553034,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-06",
+      "slug": "beispielziel-06",
+      "name": "Beispielziel 06",
+      "lat": 49.167747,
+      "lon": 13.303485,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-07",
+      "slug": "beispielziel-07",
+      "name": "Beispielziel 07",
+      "lat": 49.059495,
+      "lon": 13.075353,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-08",
+      "slug": "beispielziel-08",
+      "name": "Beispielziel 08",
+      "lat": 49.093726,
+      "lon": 13.222938,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-09",
+      "slug": "beispielziel-09",
+      "name": "Beispielziel 09",
+      "lat": 49.00356,
+      "lon": 13.155906,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-10",
+      "slug": "beispielziel-10",
+      "name": "Beispielziel 10",
+      "lat": 49.120044,
+      "lon": 13.297064,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-11",
+      "slug": "beispielziel-11",
+      "name": "Beispielziel 11",
+      "lat": 49.248145,
+      "lon": 13.45978,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-12",
+      "slug": "beispielziel-12",
+      "name": "Beispielziel 12",
+      "lat": 49.228196,
+      "lon": 13.352749,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-13",
+      "slug": "beispielziel-13",
+      "name": "Beispielziel 13",
+      "lat": 49.016748,
+      "lon": 13.090332,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-14",
+      "slug": "beispielziel-14",
+      "name": "Beispielziel 14",
+      "lat": 48.998766,
+      "lon": 13.22441,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-15",
+      "slug": "beispielziel-15",
+      "name": "Beispielziel 15",
+      "lat": 48.959414,
+      "lon": 13.132161,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-16",
+      "slug": "beispielziel-16",
+      "name": "Beispielziel 16",
+      "lat": 49.127373,
+      "lon": 13.202048,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-17",
+      "slug": "beispielziel-17",
+      "name": "Beispielziel 17",
+      "lat": 49.232191,
+      "lon": 13.442406,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-18",
+      "slug": "beispielziel-18",
+      "name": "Beispielziel 18",
+      "lat": 49.22344,
+      "lon": 13.424907,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-19",
+      "slug": "beispielziel-19",
+      "name": "Beispielziel 19",
+      "lat": 49.090449,
+      "lon": 13.077408,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-20",
+      "slug": "beispielziel-20",
+      "name": "Beispielziel 20",
+      "lat": 49.015038,
+      "lon": 13.251331,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-21",
+      "slug": "beispielziel-21",
+      "name": "Beispielziel 21",
+      "lat": 48.985081,
+      "lon": 13.180615,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-22",
+      "slug": "beispielziel-22",
+      "name": "Beispielziel 22",
+      "lat": 49.123761,
+      "lon": 13.268315,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-23",
+      "slug": "beispielziel-23",
+      "name": "Beispielziel 23",
+      "lat": 49.23231,
+      "lon": 13.493429,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-24",
+      "slug": "beispielziel-24",
+      "name": "Beispielziel 24",
+      "lat": 49.177086,
+      "lon": 13.317154,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-25",
+      "slug": "beispielziel-25",
+      "name": "Beispielziel 25",
+      "lat": 49.066272,
+      "lon": 13.072775,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-26",
+      "slug": "beispielziel-26",
+      "name": "Beispielziel 26",
+      "lat": 49.053868,
+      "lon": 13.287684,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-27",
+      "slug": "beispielziel-27",
+      "name": "Beispielziel 27",
+      "lat": 48.972434,
+      "lon": 13.167526,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-28",
+      "slug": "beispielziel-28",
+      "name": "Beispielziel 28",
+      "lat": 49.182798,
+      "lon": 13.284049,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-29",
+      "slug": "beispielziel-29",
+      "name": "Beispielziel 29",
+      "lat": 49.251752,
+      "lon": 13.460738,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-30",
+      "slug": "beispielziel-30",
+      "name": "Beispielziel 30",
+      "lat": 49.201004,
+      "lon": 13.403605,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-31",
+      "slug": "beispielziel-31",
+      "name": "Beispielziel 31",
+      "lat": 49.01831,
+      "lon": 13.191174,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-32",
+      "slug": "beispielziel-32",
+      "name": "Beispielziel 32",
+      "lat": 49.117711,
+      "lon": 13.160077,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-33",
+      "slug": "beispielziel-33",
+      "name": "Beispielziel 33",
+      "lat": 49.081253,
+      "lon": 13.329394,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-34",
+      "slug": "beispielziel-34",
+      "name": "Beispielziel 34",
+      "lat": 49.16784,
+      "lon": 13.480801,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-35",
+      "slug": "beispielziel-35",
+      "name": "Beispielziel 35",
+      "lat": 49.001579,
+      "lon": 12.933025,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-36",
+      "slug": "beispielziel-36",
+      "name": "Beispielziel 36",
+      "lat": 49.122905,
+      "lon": 13.169876,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-37",
+      "slug": "beispielziel-37",
+      "name": "Beispielziel 37",
+      "lat": 49.214732,
+      "lon": 12.934037,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Natur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-38",
+      "slug": "beispielziel-38",
+      "name": "Beispielziel 38",
+      "lat": 49.301307,
+      "lon": 13.4907,
+      "locality": "Bezirk Klattau (CZ)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Aussicht",
+      "geheimtipp": true,
+      "demo": true
+    },
+    {
+      "id": "demo-39",
+      "slug": "beispielziel-39",
+      "name": "Beispielziel 39",
+      "lat": 49.066325,
+      "lon": 13.273079,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Kultur",
+      "geheimtipp": false,
+      "demo": true
+    },
+    {
+      "id": "demo-40",
+      "slug": "beispielziel-40",
+      "name": "Beispielziel 40",
+      "lat": 48.930111,
+      "lon": 13.090888,
+      "locality": "Landkreis Regen (DE)",
+      "description": "Synthetischer Beispieldatensatz zur Demonstration von Clustering und Filtern.",
+      "languages": [
+        "de"
+      ],
+      "category": "Wasser",
+      "geheimtipp": false,
+      "demo": true
+    }
+  ]
+}
